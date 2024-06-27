@@ -6,6 +6,7 @@ import GridLayout from "../layouts/grid.layout";
 import Sidebar from "../components/sidebar";
 import Steps from "../components/steps";
 import Step from "../types/step.type";
+import ToolboxCategory from "../types/toolbox.categories.type";
 
 interface BuilderPageProps {}
 
@@ -53,8 +54,18 @@ export default function BuilderPage(props: BuilderPageProps) {
         </div>
         <Sidebar>
           <div className="flex flex-col gap-2 mt-10">
-            <ToolboxItem name="Lowercasing"></ToolboxItem>
-            <ToolboxItem name="Tokenization"></ToolboxItem>
+            <ToolboxItem
+              name="Lowercasing"
+              category={ToolboxCategory.Remove}
+            ></ToolboxItem>
+            <ToolboxItem
+              name="Tokenization"
+              category={ToolboxCategory.Tokenization}
+            ></ToolboxItem>
+            <ToolboxItem
+              name="Tokenization"
+              category={ToolboxCategory.Normalization}
+            ></ToolboxItem>
           </div>
         </Sidebar>
       </div>
