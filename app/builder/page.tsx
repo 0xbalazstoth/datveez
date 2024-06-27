@@ -1,39 +1,62 @@
+"use client";
+
+import ToolboxItem from "../components/toolbox.item";
 import BuilderLayout from "../layouts/builder.layout";
+import GridLayout from "../layouts/grid.layout";
+import Sidebar from "../components/sidebar";
+import Steps from "../components/steps";
+import Step from "../types/step.type";
 
 interface BuilderPageProps {}
 
 export default function BuilderPage(props: BuilderPageProps) {
   const {} = props;
 
+  const steps: Step[] = [
+    {
+      name: "Upload",
+      isCompleted: true,
+      order: 1,
+      id: Math.random().toString(),
+    },
+    {
+      name: "Build",
+      isCompleted: false,
+      order: 2,
+      id: Math.random().toString(),
+    },
+    {
+      name: "Normalize",
+      isCompleted: false,
+      order: 3,
+      id: Math.random().toString(),
+    },
+  ];
+
   return (
     <BuilderLayout>
       <div className="drawer lg:drawer-open">
         <input id="my-drawer-2" type="checkbox" className="drawer-toggle" />
-        <div className="drawer-content flex flex-col items-center justify-center">
-          <h1>BuilderPage</h1>
-          <label
-            htmlFor="my-drawer-2"
-            className="btn btn-primary drawer-button lg:hidden"
-          >
-            Open drawer
-          </label>
+        <div className="drawer-content p-4 flex flex-col min-h-screen">
+          <Steps steps={steps}></Steps>
+
+          <div className="divider"></div>
+
+          <GridLayout>
+            <label
+              htmlFor="my-drawer-2"
+              className="btn btn-secondary drawer-button lg:hidden mt-4"
+            >
+              Open drawer
+            </label>
+          </GridLayout>
         </div>
-        <div className="drawer-side">
-          <label
-            htmlFor="my-drawer-2"
-            aria-label="close sidebar"
-            className="drawer-overlay"
-          ></label>
-          <ul className="menu bg-white border border-r-2 text-base-content min-h-full w-80 p-4">
-            {/* Sidebar content here */}
-            <li>
-              <a>Sidebar Item 1</a>
-            </li>
-            <li>
-              <a>Sidebar Item 2</a>
-            </li>
-          </ul>
-        </div>
+        <Sidebar>
+          <div className="flex flex-col gap-2 mt-10">
+            <ToolboxItem name="Lowercasing"></ToolboxItem>
+            <ToolboxItem name="Tokenization"></ToolboxItem>
+          </div>
+        </Sidebar>
       </div>
     </BuilderLayout>
   );
