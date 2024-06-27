@@ -10,11 +10,15 @@ import { Step, StepName } from "../types/step.type";
 import { ToolboxCategory } from "../types/toolbox.categories.type";
 import { v4 as uuidv4 } from "uuid";
 import Canvas from "../components/canvas";
+import { useRete } from "rete-react-plugin";
+import { createEditor } from "../components/test";
 
 interface StepsPageProps {}
 
 export default function StepsPage(props: StepsPageProps) {
   const {} = props;
+
+  const [ref] = useRete(createEditor);
 
   const steps: Step[] = [
     {
@@ -59,7 +63,8 @@ export default function StepsPage(props: StepsPageProps) {
           {/* Build step */}
           {/* https://retejs.org/examples/connection-path */}
           <BuilderStep>
-            <Canvas />ą
+            {/* <Canvas /> */}
+            <div ref={ref} style={{ height: "100vh", width: "100vw" }}></div>
           </BuilderStep>
 
           {/* Normalize step */}
