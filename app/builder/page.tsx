@@ -50,6 +50,13 @@ export default function BuilderPage(props: BuilderPageProps) {
             >
               Open drawer
             </label>
+
+            <ToolboxItem
+              name="Lowercasing"
+              category={ToolboxCategory.Remove}
+              isDropped
+              tip="Lowercase all text"
+            ></ToolboxItem>
           </GridLayout>
         </div>
         <Sidebar>
@@ -57,14 +64,17 @@ export default function BuilderPage(props: BuilderPageProps) {
             <ToolboxItem
               name="Lowercasing"
               category={ToolboxCategory.Remove}
+              tip="Lowercase all text"
             ></ToolboxItem>
             <ToolboxItem
               name="Tokenization"
               category={ToolboxCategory.Tokenization}
+              tip="Tokenize text into words"
             ></ToolboxItem>
             <ToolboxItem
-              name="Tokenization"
+              name="Normalization"
               category={ToolboxCategory.Normalization}
+              tip="Normalize text by removing special characters"
             ></ToolboxItem>
           </div>
         </Sidebar>
