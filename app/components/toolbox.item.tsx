@@ -1,4 +1,4 @@
-import ToolboxCategory from "../types/toolbox.categories.type";
+import { ToolboxCategory } from "../types/toolbox.categories.type";
 
 interface ToolboxItemProps {
   name: string;

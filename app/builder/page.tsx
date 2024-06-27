@@ -1,28 +1,28 @@
 "use client";
 
 import ToolboxItem from "../components/toolbox.item";
-import BuilderLayout from "../layouts/builder.layout";
-import GridLayout from "../layouts/grid.layout";
+import StepsLayout from "../layouts/steps.layout";
+import BuilderStep from "../steps/builder.step";
 import Sidebar from "../components/sidebar";
 import Steps from "../components/steps";
-import Step from "../types/step.type";
-import ToolboxCategory from "../types/toolbox.categories.type";
+import { Step, StepName } from "../types/step.type";
+import { ToolboxCategory } from "../types/toolbox.categories.type";
 
-interface BuilderPageProps {}
+interface StepsPageProps {}
 
-export default function BuilderPage(props: BuilderPageProps) {
+export default function StepsPage(props: StepsPageProps) {
   const {} = props;
 
   const steps: Step[] = [
     {
-      name: "Upload",
+      name: StepName.Build,
       isCompleted: true,
       order: 1,
       id: Math.random().toString(),
     },
     {
       name: "Build",
-      isCompleted: false,
+      isCompleted: true,
       order: 2,
       id: Math.random().toString(),
     },
@@ -35,29 +35,35 @@ export default function BuilderPage(props: BuilderPageProps) {
   ];
 
   return (
-    <BuilderLayout>
+    <StepsLayout>
       <div className="drawer lg:drawer-open">
         <input id="my-drawer-2" type="checkbox" className="drawer-toggle" />
         <div className="drawer-content p-4 flex flex-col min-h-screen">
-          <Steps steps={steps}></Steps>
+          <div className="flex flex-col justify-center items-center">
+            <Steps steps={steps}></Steps>
+            <label
+              htmlFor="my-drawer-2"
+              className="btn btn-black drawer-button lg:hidden mt-4 w-[300px]"
+            >
+              Show toolbox
+            </label>
+          </div>
 
           <div className="divider"></div>
 
-          <GridLayout>
-            <label
-              htmlFor="my-drawer-2"
-              className="btn btn-secondary drawer-button lg:hidden mt-4"
-            >
-              Open drawer
-            </label>
+          {/* Upload dataset step */}
 
+          {/* Build step */}
+          <BuilderStep>
             <ToolboxItem
               name="Lowercasing"
               category={ToolboxCategory.Remove}
               isDropped
               tip="Lowercase all text"
             ></ToolboxItem>
-          </GridLayout>
+          </BuilderStep>
+
+          {/* Normalize step */}
         </div>
         <Sidebar>
           <div className="flex flex-col gap-2 mt-10">
@@ -79,6 +85,6 @@ export default function BuilderPage(props: BuilderPageProps) {
           </div>
         </Sidebar>
       </div>
-    </BuilderLayout>
+    </StepsLayout>
   );
 }

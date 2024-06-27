@@ -1,10 +1,10 @@
 import React from "react";
 
-interface GridLayoutProps {
+interface BuilderStepProps {
   children: React.ReactNode;
 }
 
-export default function GridLayout(props: GridLayoutProps) {
+export default function BuilderStep(props: BuilderStepProps) {
   const { children } = props;
   return (
     <div className="inset-0 flex-grow rounded-lg bg-transparent bg-[radial-gradient(#e5e7eb_1px,transparent_1px)] [background-size:16px_16px]">

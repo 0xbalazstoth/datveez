@@ -1,5 +1,5 @@
 import React, { useState } from "react";
-import Step from "../types/step.type";
+import { Step } from "../types/step.type";
 
 interface StepsProps {
   steps: Step[];
@@ -16,7 +16,9 @@ export default function Steps(props: StepsProps) {
           .map((step) => (
             <li
               key={step.id}
-              className={`step ${step.isCompleted ? "step-accent" : ""}`}
+              className={`step text-black ${
+                step.isCompleted ? "step-accent" : ""
+              }`}
             >
               {step.name}
             </li>

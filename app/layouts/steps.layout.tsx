@@ -1,8 +1,8 @@
-interface BuilderLayoutProps {
+interface StepsLayoutProps {
   children: React.ReactNode;
 }
 
-export default function BuilderLayout(props: BuilderLayoutProps) {
+export default function StepsLayout(props: StepsLayoutProps) {
   const { children } = props;
 
   return (

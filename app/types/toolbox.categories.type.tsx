@@ -3,5 +3,3 @@ export enum ToolboxCategory {
   Tokenization = "tokenization",
   Normalization = "normalization",
 }
-
-export default ToolboxCategory;
