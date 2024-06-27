@@ -5,6 +5,7 @@ interface ToolboxItemProps {
   category: ToolboxCategory;
   isDropped?: boolean;
   tip: string;
+  id: string;
 }
 
 const categories = [
