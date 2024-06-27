@@ -57,16 +57,9 @@ export default function StepsPage(props: StepsPageProps) {
           {/* Upload dataset step */}
 
           {/* Build step */}
+          {/* https://retejs.org/examples/connection-path */}
           <BuilderStep>
-            <ToolboxItem
-              name="test"
-              category={ToolboxCategory.Normalization}
-              id={crypto.randomUUID()}
-              tip="test tip"
-              isDropped
-            ></ToolboxItem>
-
-            <Canvas />
+            <Canvas />ą
           </BuilderStep>
 
           {/* Normalize step */}
