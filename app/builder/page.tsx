@@ -18,6 +18,7 @@ import {
 } from "@heroicons/react/24/outline";
 import Toast from "../components/toast";
 import { ToastType } from "../types/toast.type";
+import StepIndicator from "../steps/step.indicator";
 
 interface StepsPageProps {}
 
@@ -120,19 +121,13 @@ export default function StepsPage(props: StepsPageProps) {
         <input id="my-drawer-2" type="checkbox" className="drawer-toggle" />
         <div className="drawer-content p-4 flex flex-col min-h-screen">
           <div className="relative flex flex-row items-center">
-            <div className="flex flex-row gap-3">
-              {currentStepIndex !== 0 ? (
-                <button className="btn" onClick={goToPreviousStep}>
-                  <ChevronLeftIcon className="h-5 w-5" />
-                </button>
-              ) : null}
+            <StepIndicator
+              currentStepIndex={currentStepIndex}
+              steps={steps}
+              setSteps={setSteps}
+              setCurrentStepIndex={setCurrentStepIndex}
+            ></StepIndicator>
 
-              {currentStepIndex !== initialSteps.length - 1 ? (
-                <button className="btn" onClick={goToNextStep}>
-                  <ChevronRightIcon className="h-5 w-5" />
-                </button>
-              ) : null}
-            </div>
             <div className="absolute left-1/2 transform -translate-x-1/2">
               <Steps steps={steps}></Steps>
             </div>
