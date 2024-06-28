@@ -9,32 +9,28 @@ import Steps from "../components/steps";
 import { Step, StepName } from "../types/step.type";
 import { ToolboxCategory } from "../types/toolbox.categories.type";
 import { v4 as uuidv4 } from "uuid";
-import Canvas from "../components/canvas";
-import { useRete } from "rete-react-plugin";
-import { createEditor } from "../components/test";
+import Flow from "../flow editor/flow";
 
 interface StepsPageProps {}
 
 export default function StepsPage(props: StepsPageProps) {
   const {} = props;
 
-  const [ref] = useRete(createEditor);
-
   const steps: Step[] = [
     {
-      name: StepName.Build,
+      name: StepName.Upload,
       isCompleted: true,
       order: 1,
       id: crypto.randomUUID(),
     },
     {
-      name: "Build",
+      name: StepName.Build,
       isCompleted: true,
       order: 2,
       id: crypto.randomUUID(),
     },
     {
-      name: "Normalize",
+      name: StepName.Normalize,
       isCompleted: false,
       order: 3,
       id: crypto.randomUUID(),
@@ -61,10 +57,10 @@ export default function StepsPage(props: StepsPageProps) {
           {/* Upload dataset step */}
 
           {/* Build step */}
-          {/* https://retejs.org/examples/connection-path */}
           <BuilderStep>
-            {/* <Canvas /> */}
-            <div ref={ref} style={{ height: "100vh", width: "100vw" }}></div>
+            {/* Starting node always "Dataset" */}
+            {/* Toast to show history of actions */}
+            <Flow></Flow>
           </BuilderStep>
 
           {/* Normalize step */}
