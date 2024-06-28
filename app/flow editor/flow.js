@@ -1,6 +1,6 @@
 import { initialNodes, initialEdges } from "./node-edges";
 import { stratify, tree } from "d3-hierarchy";
-import React, { useCallback, useEffect, useState } from "react";
+import React, { useCallback, useEffect, useState, useRef } from "react";
 import ReactFlow, {
   ReactFlowProvider,
   addEdge,
@@ -33,6 +33,11 @@ const g = tree();
 const getLayoutedElements = (nodes, edges, options) => {
   if (nodes.length === 0) return { nodes, edges };
 
+  if (typeof window === "undefined") {
+    // Return nodes and edges as they are for server-side rendering
+    return { nodes, edges };
+  }
+
   const { width, height } = document
     .querySelector(`[data-id="${nodes[0].id}"]`)
     ?.getBoundingClientRect() || { width: 50, height: 50 };
@@ -56,6 +61,7 @@ function LayoutFlow() {
   const [nodes, setNodes, onNodesChange] = useNodesState(initialNodes);
   const [edges, setEdges, onEdgesChange] = useEdgesState(initialEdges);
   const { fitView } = useReactFlow();
+  const layoutInitialized = useRef(false);
 
   const onConnect = useCallback(
     (params) =>
@@ -69,7 +75,7 @@ function LayoutFlow() {
           eds
         )
       ),
-    []
+    [setEdges]
   );
 
   const onEdgesDelete = useCallback(
@@ -97,16 +103,19 @@ function LayoutFlow() {
         fitView();
       });
     },
-    [nodes, edges]
+    [nodes, edges, fitView]
   );
 
-  const isGraphLoaded = !!document.querySelector(`[data-id="${nodes[0].id}"]`);
-
   useEffect(() => {
-    if (isGraphLoaded) {
+    if (
+      typeof window !== "undefined" &&
+      !layoutInitialized.current &&
+      document.querySelector(`[data-id="${nodes[0].id}"]`)
+    ) {
+      layoutInitialized.current = true;
       onLayout();
     }
-  }, [isGraphLoaded]);
+  }, [nodes, onLayout]);
 
   const addNode = () => {
     const lastNode = nodes[nodes.length - 1];
