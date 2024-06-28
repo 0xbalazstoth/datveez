@@ -24,9 +24,9 @@ export default memo(function CustomNode({ data, isConnectable, xPos, yPos }) {
       <div
         style={{
           padding: "0.5rem 1rem",
-          border: "1px solid #000",
           borderRadius: "16px",
           fontSize: "12px",
+          border: data.isInitial ? "none" : "1px solid #000",
         }}
       >
         {data.label}

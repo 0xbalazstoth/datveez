@@ -11,6 +11,7 @@ import ReactFlow, {
 import { MarkerType } from "reactflow";
 import CustomNode from "./node";
 import CustomEdge from "./edge";
+import { PlusIcon, MagnifyingGlassPlusIcon } from "@heroicons/react/24/outline";
 
 import "reactflow/dist/style.css";
 
@@ -81,13 +82,16 @@ function LayoutFlow() {
   const onEdgesDelete = useCallback(
     (edgesToRemove) =>
       setEdges((eds) => eds.filter((edge) => !edgesToRemove.includes(edge))),
-    []
+    [setEdges]
   );
 
-  const onEdgeClick = useCallback((event, edge) => {
-    event.stopPropagation();
-    setEdges((eds) => eds.filter((e) => e.id !== edge.id));
-  }, []);
+  const onEdgeClick = useCallback(
+    (event, edge) => {
+      event.stopPropagation();
+      setEdges((eds) => eds.filter((e) => e.id !== edge.id));
+    },
+    [setEdges]
+  );
 
   const onLayout = useCallback(
     (direction) => {
@@ -103,7 +107,7 @@ function LayoutFlow() {
         fitView();
       });
     },
-    [nodes, edges, fitView]
+    [nodes, edges, setNodes, setEdges, fitView]
   );
 
   useEffect(() => {
@@ -137,8 +141,16 @@ function LayoutFlow() {
 
   return (
     <>
-      <button onClick={fitView}>Fit Screen</button>
-      <button onClick={addNode}>Add Node</button>
+      <div className="flex gap-3">
+        <button className="btn" onClick={fitView}>
+          <MagnifyingGlassPlusIcon className="h-5 w-5" />
+          Fit Screen
+        </button>
+        <button className="btn" onClick={addNode}>
+          <PlusIcon className="h-5 w-5" />
+          Add Node
+        </button>
+      </div>
       <ReactFlow
         nodes={nodes}
         edges={edges}
