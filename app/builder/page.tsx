@@ -59,16 +59,6 @@ export default function StepsPage(props: StepsPageProps) {
     // Do something with the connections
   };
 
-  const flowRef = useRef<any>(null);
-
-  const fitView = () => {
-    flowRef.current?.fitView();
-  };
-
-  const addNode = () => {
-    flowRef.current?.addNode();
-  };
-
   return (
     <StepsLayout>
       <div className="drawer lg:drawer-open">
@@ -82,26 +72,6 @@ export default function StepsPage(props: StepsPageProps) {
             >
               Show toolbox
             </label>
-          </div>
-
-          <div className="divider"></div>
-
-          <div className="flex gap-3">
-            <button className="btn" onClick={fitView}>
-              <MagnifyingGlassPlusIcon className="h-5 w-5" />
-              Fit Screen
-            </button>
-            <button className="btn" onClick={addNode}>
-              <PlusIcon className="h-5 w-5" />
-              Add Node
-            </button>
-            <button
-              className="btn border-2 bg-white text-black hover:bg-gray-100"
-              onClick={handleDatasetModalOpen}
-            >
-              <CircleStackIcon className="h-5 w-5" />
-              Dataset parameters
-            </button>
           </div>
 
           {/* Upload dataset step */}
