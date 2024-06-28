@@ -10,6 +10,7 @@ import { Step, StepName } from "../types/step.type";
 import { ToolboxCategory } from "../types/toolbox.categories.type";
 import Flow from "../flow editor/flow";
 import Modal from "../components/modal";
+import { CircleStackIcon } from "@heroicons/react/24/outline";
 
 interface StepsPageProps {}
 
@@ -41,10 +42,17 @@ export default function StepsPage(props: StepsPageProps) {
 
   const handleDatasetModalOpen = () => {
     datasetModalRef.current?.showModal();
+
+    console.log("OPEN DA");
   };
 
   const handleDatasetModalClose = () => {
     datasetModalRef.current?.close();
+  };
+
+  const handleGetConnections = (connections: any) => {
+    console.log("Connections from Flow:", connections);
+    // Do something with the connections
   };
 
   return (
@@ -63,12 +71,15 @@ export default function StepsPage(props: StepsPageProps) {
           </div>
 
           <div className="divider"></div>
-          <button className="btn" onClick={handleDatasetModalOpen}></button>
+
           {/* Upload dataset step */}
 
           {/* Build step */}
           <BuilderStep>
-            <Flow></Flow>
+            <Flow
+              handleDatasetModalOpen={handleDatasetModalOpen}
+              onGetConnections={handleGetConnections}
+            ></Flow>
           </BuilderStep>
 
           <Modal

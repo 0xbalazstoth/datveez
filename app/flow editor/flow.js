@@ -11,7 +11,11 @@ import ReactFlow, {
 import { MarkerType } from "reactflow";
 import CustomNode from "./node";
 import CustomEdge from "./edge";
-import { PlusIcon, MagnifyingGlassPlusIcon } from "@heroicons/react/24/outline";
+import {
+  PlusIcon,
+  MagnifyingGlassPlusIcon,
+  CircleStackIcon,
+} from "@heroicons/react/24/outline";
 
 import "reactflow/dist/style.css";
 
@@ -101,7 +105,7 @@ const logEdgeConnections = (edges) => {
   });
 };
 
-function LayoutFlow() {
+function LayoutFlow({ handleDatasetModalOpen, onGetConnections }) {
   const [nodes, setNodes, onNodesChange] = useNodesState(initialNodes);
   const [edges, setEdges, onEdgesChange] = useEdgesState(initialEdges);
   const { fitView } = useReactFlow();
@@ -172,7 +176,7 @@ function LayoutFlow() {
         label: `Node ${nodes.length + 1}`,
         sourceCount: 1,
         targetCount: 1,
-        onDelete: deleteNode, // Add onDelete here
+        onDelete: deleteNode,
       },
       position: {
         x: lastNode ? lastNode.position.x : Math.random() * 400,
@@ -197,18 +201,27 @@ function LayoutFlow() {
     const path = getOrderedPath(nodes, edges);
     console.log("Ordered Path:", path);
     logEdgeConnections(edges);
-  }, [nodes, edges]);
+
+    onGetConnections(edges);
+  }, [nodes, edges, onGetConnections]);
 
   return (
     <>
-      <div className="flex gap-3">
-        <button className="btn" onClick={fitView}>
+      <div className="flex gap-3 mt-3">
+        <button className="btn " onClick={fitView}>
           <MagnifyingGlassPlusIcon className="h-5 w-5" />
           Fit Screen
         </button>
-        <button className="btn" onClick={addNode}>
+        <button className="btn " onClick={addNode}>
           <PlusIcon className="h-5 w-5" />
           Add Node
+        </button>
+        <button
+          className="btn border-2 bg-white text-black hover:bg-gray-100"
+          onClick={handleDatasetModalOpen}
+        >
+          <CircleStackIcon className="h-5 w-5" />
+          Dataset parameters
         </button>
       </div>
       <ReactFlow
@@ -231,9 +244,12 @@ function LayoutFlow() {
   );
 }
 
-const Flow = () => (
+const Flow = ({ onGetConnections, handleDatasetModalOpen }) => (
   <ReactFlowProvider>
-    <LayoutFlow />
+    <LayoutFlow
+      handleDatasetModalOpen={handleDatasetModalOpen}
+      onGetConnections={onGetConnections}
+    />
   </ReactFlowProvider>
 );
 
