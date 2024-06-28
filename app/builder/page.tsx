@@ -1,20 +1,15 @@
 "use client";
 
-import { useRef, useState } from "react";
+import { useRef, useState, useEffect } from "react";
 import ToolboxItem from "../components/toolbox.item";
 import StepsLayout from "../layouts/steps.layout";
-import BuilderStep from "../steps/builder.step";
 import Sidebar from "../components/sidebar";
 import Steps from "../components/steps";
 import { Step, StepName } from "../types/step.type";
 import { ToolboxCategory } from "../types/toolbox.categories.type";
 import Flow from "../flow editor/flow";
 import Modal from "../components/modal";
-import {
-  PlusIcon,
-  MagnifyingGlassPlusIcon,
-  CircleStackIcon,
-} from "@heroicons/react/24/outline";
+import SmallScreenMessage from "../components/small.screen.message";
 
 interface StepsPageProps {}
 
@@ -43,10 +38,26 @@ export default function StepsPage(props: StepsPageProps) {
   ];
 
   const datasetModalRef = useRef<HTMLDialogElement>(null);
+  const [isScreenSmall, setIsScreenSmall] = useState(false);
+  const [isClient, setIsClient] = useState(false);
+
+  useEffect(() => {
+    setIsClient(true);
+
+    const handleResize = () => {
+      setIsScreenSmall(window.innerWidth < 1024);
+    };
+
+    handleResize(); // Initial check
+    window.addEventListener("resize", handleResize);
+
+    return () => {
+      window.removeEventListener("resize", handleResize);
+    };
+  }, []);
 
   const handleDatasetModalOpen = () => {
     datasetModalRef.current?.showModal();
-
     console.log("OPEN DA");
   };
 
@@ -59,6 +70,14 @@ export default function StepsPage(props: StepsPageProps) {
     // Do something with the connections
   };
 
+  if (!isClient) {
+    return null; // Render nothing on the server-side
+  }
+
+  if (isScreenSmall) {
+    return <SmallScreenMessage />;
+  }
+
   return (
     <StepsLayout>
       <div className="drawer lg:drawer-open">
@@ -66,23 +85,17 @@ export default function StepsPage(props: StepsPageProps) {
         <div className="drawer-content p-4 flex flex-col min-h-screen">
           <div className="flex flex-col justify-center items-center">
             <Steps steps={steps}></Steps>
-            <label
-              htmlFor="my-drawer-2"
-              className="btn btn-black drawer-button lg:hidden mt-4 w-[300px]"
-            >
-              Show toolbox
-            </label>
           </div>
 
           {/* Upload dataset step */}
 
+          <div className="divider"></div>
+
           {/* Build step */}
-          <BuilderStep>
-            <Flow
-              handleDatasetModalOpen={handleDatasetModalOpen}
-              onGetConnections={handleGetConnections}
-            ></Flow>
-          </BuilderStep>
+          <Flow
+            handleDatasetModalOpen={handleDatasetModalOpen}
+            onGetConnections={handleGetConnections}
+          ></Flow>
 
           <Modal
             title="Dataset parameters"

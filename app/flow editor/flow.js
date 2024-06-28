@@ -207,7 +207,7 @@ function LayoutFlow({ handleDatasetModalOpen, onGetConnections }) {
 
   return (
     <>
-      <div className="flex gap-3 mt-[-60px]">
+      <div className="flex gap-3">
         <button className="btn " onClick={fitView}>
           <MagnifyingGlassPlusIcon className="h-5 w-5" />
           Fit Screen
@@ -225,6 +225,7 @@ function LayoutFlow({ handleDatasetModalOpen, onGetConnections }) {
         </button>
       </div>
       <ReactFlow
+        className="inset-0 flex-grow rounded-lg bg-transparent bg-[radial-gradient(#d1d5db_1px,transparent_1px)] [background-size:16px_16px]"
         nodes={nodes.map((node) => ({
           ...node,
           data: { ...node.data, onDelete: deleteNode },
