@@ -10,6 +10,7 @@ import { ToolboxCategory } from "../types/toolbox.categories.type";
 import Flow from "../flow editor/flow";
 import Modal from "../components/modal";
 import SmallScreenMessage from "../components/small.screen.message";
+import BuilderStep from "../steps/builder.step";
 
 interface StepsPageProps {}
 
@@ -58,7 +59,6 @@ export default function StepsPage(props: StepsPageProps) {
 
   const handleDatasetModalOpen = () => {
     datasetModalRef.current?.showModal();
-    console.log("OPEN DA");
   };
 
   const handleDatasetModalClose = () => {
@@ -67,11 +67,10 @@ export default function StepsPage(props: StepsPageProps) {
 
   const handleGetConnections = (connections: any) => {
     console.log("Connections from Flow:", connections);
-    // Do something with the connections
   };
 
   if (!isClient) {
-    return null; // Render nothing on the server-side
+    return null;
   }
 
   if (isScreenSmall) {
@@ -87,24 +86,12 @@ export default function StepsPage(props: StepsPageProps) {
             <Steps steps={steps}></Steps>
           </div>
 
-          {/* Upload dataset step */}
-
           <div className="divider"></div>
 
-          {/* Build step */}
-          <Flow
-            handleDatasetModalOpen={handleDatasetModalOpen}
-            onGetConnections={handleGetConnections}
-          ></Flow>
+          {/* Upload dataset step */}
 
-          <Modal
-            title="Dataset parameters"
-            onClose={handleDatasetModalClose}
-            id="dataset_modal"
-            ref={datasetModalRef}
-          >
-            <span>Dataset modal</span>
-          </Modal>
+          {/* Build step */}
+          <BuilderStep></BuilderStep>
 
           {/* Normalize step */}
         </div>
