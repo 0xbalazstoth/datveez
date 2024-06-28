@@ -8,7 +8,6 @@ import Sidebar from "../components/sidebar";
 import Steps from "../components/steps";
 import { Step, StepName } from "../types/step.type";
 import { ToolboxCategory } from "../types/toolbox.categories.type";
-import { v4 as uuidv4 } from "uuid";
 import Flow from "../flow editor/flow";
 
 interface StepsPageProps {}
@@ -21,19 +20,19 @@ export default function StepsPage(props: StepsPageProps) {
       name: StepName.Upload,
       isCompleted: true,
       order: 1,
-      id: crypto.randomUUID(),
+      id: Math.random().toString(),
     },
     {
       name: StepName.Build,
       isCompleted: true,
       order: 2,
-      id: crypto.randomUUID(),
+      id: Math.random().toString(),
     },
     {
       name: StepName.Normalize,
       isCompleted: false,
       order: 3,
-      id: crypto.randomUUID(),
+      id: Math.random().toString(),
     },
   ];
 
@@ -68,19 +67,19 @@ export default function StepsPage(props: StepsPageProps) {
         <Sidebar>
           <div className="flex flex-col gap-2 mt-10">
             <ToolboxItem
-              id={crypto.randomUUID()}
+              id={Math.random().toString()}
               name="Lowercasing"
               category={ToolboxCategory.Remove}
               tip="Lowercase all text"
             ></ToolboxItem>
             <ToolboxItem
-              id={crypto.randomUUID()}
+              id={Math.random().toString()}
               name="Tokenization"
               category={ToolboxCategory.Tokenization}
               tip="Tokenize text into words"
             ></ToolboxItem>
             <ToolboxItem
-              id={crypto.randomUUID()}
+              id={Math.random().toString()}
               name="Normalization"
               category={ToolboxCategory.Normalization}
               tip="Normalize text by removing special characters"

@@ -8,7 +8,6 @@ export default memo(function CustomNode({ data, isConnectable, xPos, yPos }) {
   console.log({ xPos, yPos });
   return (
     <>
-      {/* Target dots for each number of sourceCount */}
       {Array.from({ length: sourceCount }).map((_, index) => {
         const dotPosition = index * 20 + 20 + "%";
         return (
@@ -31,7 +30,6 @@ export default memo(function CustomNode({ data, isConnectable, xPos, yPos }) {
       >
         {data.label}
       </div>
-      {/* Source dots for each number of targetCount */}
       {Array.from({ length: targetCount }).map((_, index) => {
         const dotPosition = index * 20 + 20 + "%";
         return (

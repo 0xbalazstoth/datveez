@@ -58,6 +58,49 @@ const getLayoutedElements = (nodes, edges, options) => {
   };
 };
 
+const getOrderedPath = (nodes, edges) => {
+  const nodeMap = new Map();
+  nodes.forEach((node) => {
+    nodeMap.set(node.id, { ...node, edges: [] });
+  });
+
+  edges.forEach((edge) => {
+    const sourceNode = nodeMap.get(edge.source);
+    if (sourceNode) {
+      sourceNode.edges.push(edge);
+    }
+  });
+
+  const path = [];
+  const traverse = (nodeId) => {
+    const currentNode = nodeMap.get(nodeId);
+    if (currentNode) {
+      currentNode.edges.forEach((edge) => {
+        path.push({ from: edge.source, to: edge.target });
+        traverse(edge.target);
+      });
+    }
+  };
+
+  // Assuming the initial node is "Dataset"
+  traverse("Dataset");
+  return path;
+};
+
+const logEdgeConnections = (edges) => {
+  const edgeMap = new Map();
+  edges.forEach((edge) => {
+    if (!edgeMap.has(edge.source)) {
+      edgeMap.set(edge.source, []);
+    }
+    edgeMap.get(edge.source).push(edge.target);
+  });
+
+  edgeMap.forEach((targets, source) => {
+    console.log(`Node ${source} is connected to nodes: ${targets.join(", ")}`);
+  });
+};
+
 function LayoutFlow() {
   const [nodes, setNodes, onNodesChange] = useNodesState(initialNodes);
   const [edges, setEdges, onEdgesChange] = useEdgesState(initialEdges);
@@ -138,6 +181,12 @@ function LayoutFlow() {
     };
     setNodes((nds) => nds.concat(newNode));
   };
+
+  useEffect(() => {
+    const path = getOrderedPath(nodes, edges);
+    console.log("Ordered Path:", path);
+    logEdgeConnections(edges);
+  }, [nodes, edges]);
 
   return (
     <>
