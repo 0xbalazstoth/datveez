@@ -1,13 +1,25 @@
-import React, { memo } from "react";
+import React, { memo, useState } from "react";
 import { Handle, Position } from "reactflow";
 
 const charIds = ["a", "b", "c", "d"];
 
-export default memo(function CustomNode({ data, isConnectable, xPos, yPos }) {
+export default memo(function CustomNode({
+  data,
+  isConnectable,
+  xPos,
+  yPos,
+  id,
+  onDelete,
+}) {
+  const [isHovered, setIsHovered] = useState(false);
   const { targetCount, sourceCount } = data;
-  console.log({ xPos, yPos });
+
   return (
-    <>
+    <div
+      style={{ position: "relative" }}
+      onMouseEnter={() => setIsHovered(true)}
+      onMouseLeave={() => setIsHovered(false)}
+    >
       {Array.from({ length: sourceCount }).map((_, index) => {
         const dotPosition = index * 20 + 20 + "%";
         return (
@@ -26,9 +38,29 @@ export default memo(function CustomNode({ data, isConnectable, xPos, yPos }) {
           borderRadius: "16px",
           fontSize: "12px",
           border: data.isInitial ? "none" : "1px solid #000",
+          position: "relative",
         }}
       >
         {data.label}
+        {isHovered && (
+          <button
+            style={{
+              position: "absolute",
+              top: "-10px",
+              right: "-10px",
+              background: "red",
+              color: "white",
+              border: "none",
+              borderRadius: "50%",
+              width: "20px",
+              height: "20px",
+              cursor: "pointer",
+            }}
+            onClick={() => data.onDelete(id)}
+          >
+            x
+          </button>
+        )}
       </div>
       {Array.from({ length: targetCount }).map((_, index) => {
         const dotPosition = index * 20 + 20 + "%";
@@ -42,6 +74,6 @@ export default memo(function CustomNode({ data, isConnectable, xPos, yPos }) {
           />
         );
       })}
-    </>
+    </div>
   );
 });

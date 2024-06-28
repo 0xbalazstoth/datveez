@@ -17,3 +17,7 @@
   border-radius: 16px;
   color: #fff;
 }
+
+.custom-node:hover .delete-button {
+  display: block !important;
+}

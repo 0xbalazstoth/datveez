@@ -1,0 +1,7 @@
+.delete-button {
+  display: none;
+}
+
+div:hover .delete-button {
+  display: block;
+}

@@ -172,6 +172,7 @@ function LayoutFlow() {
         label: `Node ${nodes.length + 1}`,
         sourceCount: 1,
         targetCount: 1,
+        onDelete: deleteNode, // Add onDelete here
       },
       position: {
         x: lastNode ? lastNode.position.x : Math.random() * 400,
@@ -181,6 +182,16 @@ function LayoutFlow() {
     };
     setNodes((nds) => nds.concat(newNode));
   };
+
+  const deleteNode = useCallback(
+    (nodeId) => {
+      setNodes((nds) => nds.filter((node) => node.id !== nodeId));
+      setEdges((eds) =>
+        eds.filter((edge) => edge.source !== nodeId && edge.target !== nodeId)
+      );
+    },
+    [setNodes, setEdges]
+  );
 
   useEffect(() => {
     const path = getOrderedPath(nodes, edges);
@@ -201,7 +212,10 @@ function LayoutFlow() {
         </button>
       </div>
       <ReactFlow
-        nodes={nodes}
+        nodes={nodes.map((node) => ({
+          ...node,
+          data: { ...node.data, onDelete: deleteNode },
+        }))}
         edges={edges}
         onNodesChange={onNodesChange}
         onEdgesChange={onEdgesChange}
