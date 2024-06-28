@@ -207,7 +207,7 @@ function LayoutFlow({ handleDatasetModalOpen, onGetConnections }) {
 
   return (
     <>
-      <div className="flex gap-3 mt-3">
+      <div className="flex gap-3">
         <button className="btn " onClick={fitView}>
           <MagnifyingGlassPlusIcon className="h-5 w-5" />
           Fit Screen
