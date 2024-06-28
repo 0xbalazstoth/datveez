@@ -8,10 +8,6 @@ interface StepsProps {
 export default function Steps(props: StepsProps) {
   const { steps } = props;
 
-  useEffect(() => {
-    console.log(steps);
-  }, [steps]);
-
   return (
     <div className="flex justify-center">
       <ul className="steps mx-auto">
