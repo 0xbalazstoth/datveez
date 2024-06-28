@@ -1,3 +1,4 @@
+import { MinusIcon, TrashIcon } from "@heroicons/react/24/outline";
 import React, { memo, useState } from "react";
 import { Handle, Position } from "reactflow";
 
@@ -42,23 +43,28 @@ export default memo(function CustomNode({
         }}
       >
         {data.label}
-        {isHovered && (
+        {isHovered && !data.isInitial && (
           <button
+            className="delete-button"
             style={{
               position: "absolute",
-              top: "-10px",
-              right: "-10px",
-              background: "red",
+              top: "-7px",
+              right: "-7px",
+              background: "#FD7176",
               color: "white",
               border: "none",
               borderRadius: "50%",
-              width: "20px",
-              height: "20px",
+              width: "18px",
+              height: "18px",
               cursor: "pointer",
+              display: "flex",
+              alignItems: "center",
+              justifyContent: "center",
+              padding: 0,
             }}
             onClick={() => data.onDelete(id)}
           >
-            x
+            <TrashIcon className="h-[10px] w-[10px]" />
           </button>
         )}
       </div>

@@ -1,6 +1,6 @@
 "use client";
 
-import { useState } from "react";
+import { useRef, useState } from "react";
 import ToolboxItem from "../components/toolbox.item";
 import StepsLayout from "../layouts/steps.layout";
 import BuilderStep from "../steps/builder.step";
@@ -9,6 +9,7 @@ import Steps from "../components/steps";
 import { Step, StepName } from "../types/step.type";
 import { ToolboxCategory } from "../types/toolbox.categories.type";
 import Flow from "../flow editor/flow";
+import Modal from "../components/modal";
 
 interface StepsPageProps {}
 
@@ -36,6 +37,16 @@ export default function StepsPage(props: StepsPageProps) {
     },
   ];
 
+  const datasetModalRef = useRef<HTMLDialogElement>(null);
+
+  const handleDatasetModalOpen = () => {
+    datasetModalRef.current?.showModal();
+  };
+
+  const handleDatasetModalClose = () => {
+    datasetModalRef.current?.close();
+  };
+
   return (
     <StepsLayout>
       <div className="drawer lg:drawer-open">
@@ -52,15 +63,22 @@ export default function StepsPage(props: StepsPageProps) {
           </div>
 
           <div className="divider"></div>
-
+          <button className="btn" onClick={handleDatasetModalOpen}></button>
           {/* Upload dataset step */}
 
           {/* Build step */}
           <BuilderStep>
-            {/* Starting node always "Dataset" */}
-            {/* Toast to show history of actions */}
             <Flow></Flow>
           </BuilderStep>
+
+          <Modal
+            title="Dataset parameters"
+            onClose={handleDatasetModalClose}
+            id="dataset_modal"
+            ref={datasetModalRef}
+          >
+            <span>Dataset modal</span>
+          </Modal>
 
           {/* Normalize step */}
         </div>
