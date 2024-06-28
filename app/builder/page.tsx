@@ -1,53 +1,29 @@
+// pages/steps.tsx
 "use client";
 
-import { useState, useEffect } from "react";
+import { useEffect, useState } from "react";
 import ToolboxItem from "../components/toolbox.item";
 import StepsLayout from "../layouts/steps.layout";
 import Sidebar from "../components/sidebar";
 import Steps from "../components/steps";
-import { Step, StepName } from "../types/step.type";
 import { ToolboxCategory } from "../types/toolbox.categories.type";
 import SmallScreenMessage from "../components/small.screen.message";
 import BuilderStep from "../steps/builder.step";
 import UploadStep from "../steps/upload.step";
 import NormalizeStep from "../steps/normalize.step";
-import {
-  ChevronLeftIcon,
-  ChevronRightIcon,
-  ExclamationCircleIcon,
-} from "@heroicons/react/24/outline";
+import { ExclamationCircleIcon } from "@heroicons/react/24/outline";
 import Toast from "../components/toast";
 import { ToastType } from "../types/toast.type";
 import StepIndicator from "../steps/step.indicator";
+import { StepsProvider, useSteps } from "../contexts/steps.context";
+import { StepName } from "../types/step.type";
 
 interface StepsPageProps {}
 
-const initialSteps: Step[] = [
-  {
-    name: StepName.Upload,
-    isCompleted: true,
-    order: 1,
-    id: Math.random().toString(),
-  },
-  {
-    name: StepName.Build,
-    isCompleted: false,
-    order: 2,
-    id: Math.random().toString(),
-  },
-  {
-    name: StepName.Normalize,
-    isCompleted: false,
-    order: 3,
-    id: Math.random().toString(),
-  },
-];
-
-export default function StepsPage(props: StepsPageProps) {
+const StepsPageContent = (props: StepsPageProps) => {
   const {} = props;
 
-  const [steps, setSteps] = useState<Step[]>(initialSteps);
-  const [currentStepIndex, setCurrentStepIndex] = useState<number>(0);
+  const { steps, currentStepIndex, uploadedFile } = useSteps();
 
   const [isScreenSmall, setIsScreenSmall] = useState(false);
   const [isClient, setIsClient] = useState(false);
@@ -66,33 +42,6 @@ export default function StepsPage(props: StepsPageProps) {
       window.removeEventListener("resize", handleResize);
     };
   }, []);
-
-  const goToNextStep = () => {
-    setSteps((prevSteps) => {
-      const newSteps = [...prevSteps];
-      if (currentStepIndex < newSteps.length - 1) {
-        newSteps[currentStepIndex].isCompleted = true;
-      }
-      return newSteps;
-    });
-    setCurrentStepIndex((prevIndex) =>
-      Math.min(prevIndex + 1, steps.length - 1)
-    );
-  };
-
-  const goToPreviousStep = () => {
-    setCurrentStepIndex((prevIndex) => {
-      const newIndex = Math.max(prevIndex - 1, 0);
-      setSteps((prevSteps) => {
-        const newSteps = [...prevSteps];
-        if (newIndex < newSteps.length) {
-          newSteps[newIndex].isCompleted = false;
-        }
-        return newSteps;
-      });
-      return newIndex;
-    });
-  };
 
   if (!isClient) {
     return null;
@@ -121,15 +70,14 @@ export default function StepsPage(props: StepsPageProps) {
         <input id="my-drawer-2" type="checkbox" className="drawer-toggle" />
         <div className="drawer-content p-4 flex flex-col min-h-screen">
           <div className="relative flex flex-row items-center">
-            <StepIndicator
-              currentStepIndex={currentStepIndex}
-              steps={steps}
-              setSteps={setSteps}
-              setCurrentStepIndex={setCurrentStepIndex}
-            ></StepIndicator>
+            <StepIndicator />
 
             <div className="absolute left-1/2 transform -translate-x-1/2">
               <Steps steps={steps}></Steps>
+            </div>
+
+            <div className="ml-auto badge badge-neutral p-4 text-white font-bold">
+              Navigate with arrow keys!
             </div>
           </div>
 
@@ -162,10 +110,27 @@ export default function StepsPage(props: StepsPageProps) {
         </Sidebar>
       </div>
 
-      <Toast
-        type={ToastType.Warning}
-        message="You have to upload your dataset first!"
-      ></Toast>
+      {/* switch case uploadedFile is not undefined/null */}
+
+      {uploadedFile ? (
+        <Toast
+          type={ToastType.Success}
+          message={`Using dataset: ${uploadedFile?.name}`}
+        ></Toast>
+      ) : (
+        <Toast
+          type={ToastType.Warning}
+          message="Please upload a dataset to continue."
+        ></Toast>
+      )}
     </StepsLayout>
+  );
+};
+
+export default function StepsPage(props: StepsPageProps) {
+  return (
+    <StepsProvider>
+      <StepsPageContent {...props} />
+    </StepsProvider>
   );
 }
