@@ -30,6 +30,7 @@ import {
 } from "@heroicons/react/24/outline";
 
 import "reactflow/dist/style.css";
+import typeOfNode from "../types/node.type";
 
 const nodeTypes = {
   selectorNode: CustomNode,
@@ -101,7 +102,7 @@ const getOrderedPath = (nodes: any, edges: any) => {
     }
   };
 
-  traverse("Dataset");
+  traverse(typeOfNode.DatasetNode);
   return path;
 };
 
