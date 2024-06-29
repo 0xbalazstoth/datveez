@@ -11,7 +11,6 @@ import SmallScreenMessage from "../components/small.screen.message";
 import BuilderStep from "../steps/builder.step";
 import UploadStep from "../steps/upload.step";
 import NormalizeStep from "../steps/normalize.step";
-import { ExclamationCircleIcon } from "@heroicons/react/24/outline";
 import Toast from "../components/toast";
 import { ToastType } from "../types/toast.type";
 import StepIndicator from "../steps/step.indicator";

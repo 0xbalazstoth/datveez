@@ -11,6 +11,7 @@ import ReactFlow, {
 import { MarkerType } from "reactflow";
 import CustomNode from "./node";
 import CustomEdge from "./edge";
+
 import {
   PlusIcon,
   MagnifyingGlassPlusIcon,
@@ -87,7 +88,6 @@ const getOrderedPath = (nodes, edges) => {
     }
   };
 
-  // Assuming the initial node is "Dataset"
   traverse("Dataset");
   return path;
 };
