@@ -7,14 +7,7 @@ import {
   ReactNode,
 } from "react";
 import { Step, StepName } from "../types/step.type";
-
-interface FileStats {
-  rowCount: number;
-  columnCount: number;
-  columns: string[];
-  uniqueValues: { [key: string]: number };
-  fileSize: string;
-}
+import FileStat from "../types/file.stat.type";
 
 interface StepsContextProps {
   steps: Step[];
@@ -25,8 +18,8 @@ interface StepsContextProps {
   setCurrentStepIndex: React.Dispatch<React.SetStateAction<number>>;
   uploadedFile: File | null;
   setUploadedFile: React.Dispatch<React.SetStateAction<File | null>>;
-  fileStats: FileStats | null;
-  setFileStats: React.Dispatch<React.SetStateAction<FileStats | null>>;
+  fileStats: FileStat | null;
+  setFileStats: React.Dispatch<React.SetStateAction<FileStat | null>>;
   fileData: any[] | null;
   setFileData: React.Dispatch<React.SetStateAction<any[] | null>>;
 }
@@ -58,7 +51,7 @@ export const StepsProvider = ({ children }: { children: ReactNode }) => {
   const [steps, setSteps] = useState<Step[]>(initialSteps);
   const [currentStepIndex, setCurrentStepIndex] = useState<number>(0);
   const [uploadedFile, setUploadedFile] = useState<File | null>(null);
-  const [fileStats, setFileStats] = useState<FileStats | null>(null);
+  const [fileStats, setFileStats] = useState<FileStat | null>(null);
   const [fileData, setFileData] = useState<any[] | null>(null);
 
   useEffect(() => {

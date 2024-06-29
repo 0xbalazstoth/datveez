@@ -1,22 +1,12 @@
-import {
-  TrashIcon,
-  ChartBarSquareIcon,
-  DocumentTextIcon,
-  FolderOpenIcon,
-} from "@heroicons/react/24/outline";
-import { useSteps } from "../contexts/steps.context";
 import { useState, useRef, useEffect } from "react";
 import Papa from "papaparse";
+import { TrashIcon } from "@heroicons/react/24/outline";
+import { useSteps } from "../contexts/steps.context";
+import FileStat from "../types/file.stat.type";
+import FileStats from "../components/file.stat";
+import FileData from "../components/file.data";
 
 interface UploadStepProps {}
-
-type FileStats = {
-  rowCount: number;
-  columnCount: number;
-  columns: string[];
-  uniqueValues: { [key: string]: number };
-  fileSize: string;
-};
 
 export default function UploadStep(props: UploadStepProps) {
   const {} = props;
@@ -46,8 +36,10 @@ export default function UploadStep(props: UploadStepProps) {
 
     Papa.parse(file, {
       header: true,
+      skipEmptyLines: true,
       worker: true,
-      chunkSize: 1024 * 1024, // 1 MB chunks
+      fastMode: false,
+      chunkSize: 3 * 1024 * 1024, // 3 MB chunks
       chunk: (results, parser) => {
         if (results.meta.fields) {
           if (rowCount === 0) {
@@ -62,12 +54,12 @@ export default function UploadStep(props: UploadStepProps) {
             columns.forEach((field: string) => {
               uniqueValues[field].add(row[field]);
             });
+            rowCount += 1;
           });
-          rowCount += results.data.length;
         }
       },
       complete: () => {
-        const stats = {
+        const stats: FileStat = {
           rowCount,
           columnCount,
           columns,
@@ -81,7 +73,7 @@ export default function UploadStep(props: UploadStepProps) {
         };
 
         setFileStats(stats);
-        setFileData(aggregatedData); // Store all data if needed
+        setFileData(aggregatedData);
       },
       error: (error) => {
         setError(`Error parsing file: ${error.message}`);
@@ -94,6 +86,11 @@ export default function UploadStep(props: UploadStepProps) {
     if (file) {
       if (file.type !== "text/csv") {
         setError("Only CSV files are allowed.");
+        return;
+      }
+      if (file.size > 51 * 1024 * 1024) {
+        // 50+1 MB size limit
+        setError("File size exceeds the 50MB limit.");
         return;
       }
       setUploadedFile(file);
@@ -134,68 +131,10 @@ export default function UploadStep(props: UploadStepProps) {
         </div>
       </div>
 
-      {fileStats && (
-        <div className="flex flex-col gap-2">
-          <h1 className="text-2xl font-bold text-black">Dataset Statistics</h1>
-          <div className="stats shadow">
-            <div className="stat">
-              <div className="stat-figure text-accent">
-                <DocumentTextIcon className="h-8 w-8" />
-              </div>
-              <div className="stat-title">Total Rows</div>
-              <div className="stat-value">{fileStats?.rowCount}</div>
-            </div>
-
-            <div className="stat">
-              <div className="stat-figure text-accent">
-                <FolderOpenIcon className="h-8 w-8" />
-              </div>
-              <div className="stat-title">File Size</div>
-              <div className="stat-value">{fileStats?.fileSize}</div>
-            </div>
-
-            <div className="stat">
-              <div className="stat-figure text-accent">
-                <ChartBarSquareIcon className="h-8 w-8" />
-              </div>
-              <div className="stat-title">
-                Columns ({fileStats?.columnCount})
-              </div>
-              <div className="stat-value text-sm">
-                {fileStats.columns.join(", ")}
-              </div>
-            </div>
-          </div>
-        </div>
-      )}
+      {fileStats && <FileStats fileStats={fileStats}></FileStats>}
 
       {fileData && fileData.length > 0 && (
-        <div className="flex flex-col gap-2 mb-[75px]">
-          <h1 className="text-2xl font-bold text-black">Dataset Preview</h1>
-          <span className="text-black">
-            Showing the first 10 rows of the dataset.
-          </span>
-          <div className="overflow-x-auto overflow-y-auto bg-neutral p-4 rounded-lg h-[400px]">
-            <table className="table table-xs table-zebra table-pin-rows">
-              <thead>
-                <tr>
-                  {fileStats!.columns.map((col: string, index: number) => (
-                    <th key={index}>{col}</th>
-                  ))}
-                </tr>
-              </thead>
-              <tbody>
-                {fileData.slice(0, 10).map((row, rowIndex) => (
-                  <tr key={rowIndex}>
-                    {fileStats!.columns.map((col: string, colIndex: number) => (
-                      <td key={colIndex}>{row[col]}</td>
-                    ))}
-                  </tr>
-                ))}
-              </tbody>
-            </table>
-          </div>
-        </div>
+        <FileData fileData={fileData} fileStats={fileStats}></FileData>
       )}
     </div>
   );
