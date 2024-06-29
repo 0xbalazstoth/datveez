@@ -26,10 +26,10 @@
     "**/*.ts",
     "**/*.tsx",
     ".next/types/**/*.ts",
-    "app/flow editor/flow.js",
+    "app/flow editor/flow-.js",
     "app/components/flow editor/node-edges.js",
     "app/flow editor/node.js",
-    "app/flow editor/edge.js"
+    "app/flow editor/edge-.js"
   ],
   "exclude": ["node_modules"]
 }

@@ -25,6 +25,7 @@ export default function BuilderStep(props: BuilderStepProps) {
 
   return (
     <>
+      {/* TODO: CSV column nodes with different normalization methods */}
       <Flow
         handleDatasetModalOpen={handleDatasetModalOpen}
         onGetConnections={handleGetConnections}
@@ -36,7 +37,7 @@ export default function BuilderStep(props: BuilderStepProps) {
         id="dataset_modal"
         ref={datasetModalRef}
       >
-        <span>Dataset modal</span>
+        <span>{uploadedFile?.name}</span>
       </Modal>
     </>
   );

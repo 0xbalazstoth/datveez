@@ -1,12 +1,22 @@
 import { initialNodes, initialEdges } from "./node-edges";
-import { stratify, tree } from "d3-hierarchy";
-import React, { useCallback, useEffect, useState, useRef } from "react";
+import { TreeLayout, stratify, tree } from "d3-hierarchy";
+import React, {
+  useCallback,
+  useEffect,
+  useState,
+  useRef,
+  ComponentType,
+} from "react";
 import ReactFlow, {
   ReactFlowProvider,
   addEdge,
   useNodesState,
   useEdgesState,
   useReactFlow,
+  Connection,
+  Edge,
+  EdgeTypes,
+  EdgeProps,
 } from "reactflow";
 import { MarkerType } from "reactflow";
 import CustomNode from "./node";
@@ -25,8 +35,8 @@ const nodeTypes = {
   selectorNode: CustomNode,
 };
 
-const edgeTypes = {
-  custom: CustomEdge,
+const edgeTypes: EdgeTypes = {
+  selectorEdge: CustomEdge as ComponentType<EdgeProps>,
 };
 
 const defaultEdgeOptions = {
@@ -35,9 +45,9 @@ const defaultEdgeOptions = {
   markerEnd: { type: MarkerType.ArrowClosed },
 };
 
-const g = tree();
+const g: TreeLayout<any> = tree();
 
-const getLayoutedElements = (nodes, edges, options) => {
+const getLayoutedElements = (nodes: any, edges: any, options: any) => {
   if (nodes.length === 0) return { nodes, edges };
 
   if (typeof window === "undefined") {
@@ -50,8 +60,11 @@ const getLayoutedElements = (nodes, edges, options) => {
     ?.getBoundingClientRect() || { width: 50, height: 50 };
 
   const hierarchy = stratify()
-    .id((node) => node.id)
-    .parentId((node) => edges.find((edge) => edge.target === node.id)?.source);
+    .id((node: any) => node.id)
+    .parentId(
+      (node: any) =>
+        edges.find((edge: { target: any }) => edge.target === node.id)?.source
+    );
   const root = hierarchy(nodes);
   const layout = g.nodeSize([width * 2, height * 2])(root);
 
@@ -64,24 +77,24 @@ const getLayoutedElements = (nodes, edges, options) => {
   };
 };
 
-const getOrderedPath = (nodes, edges) => {
+const getOrderedPath = (nodes: any, edges: any) => {
   const nodeMap = new Map();
-  nodes.forEach((node) => {
+  nodes.forEach((node: { id: any }) => {
     nodeMap.set(node.id, { ...node, edges: [] });
   });
 
-  edges.forEach((edge) => {
+  edges.forEach((edge: { source: any }) => {
     const sourceNode = nodeMap.get(edge.source);
     if (sourceNode) {
       sourceNode.edges.push(edge);
     }
   });
 
-  const path = [];
-  const traverse = (nodeId) => {
+  const path: { from: any; to: any }[] = [];
+  const traverse = (nodeId: string) => {
     const currentNode = nodeMap.get(nodeId);
     if (currentNode) {
-      currentNode.edges.forEach((edge) => {
+      currentNode.edges.forEach((edge: { source: any; target: any }) => {
         path.push({ from: edge.source, to: edge.target });
         traverse(edge.target);
       });
@@ -92,9 +105,9 @@ const getOrderedPath = (nodes, edges) => {
   return path;
 };
 
-const logEdgeConnections = (edges) => {
+const logEdgeConnections = (edges: any) => {
   const edgeMap = new Map();
-  edges.forEach((edge) => {
+  edges.forEach((edge: { source: any; target: any }) => {
     if (!edgeMap.has(edge.source)) {
       edgeMap.set(edge.source, []);
     }
@@ -106,14 +119,20 @@ const logEdgeConnections = (edges) => {
   });
 };
 
-function LayoutFlow({ handleDatasetModalOpen, onGetConnections }) {
+function LayoutFlow({
+  handleDatasetModalOpen,
+  onGetConnections,
+}: {
+  handleDatasetModalOpen: any;
+  onGetConnections: any;
+}) {
   const [nodes, setNodes, onNodesChange] = useNodesState(initialNodes);
   const [edges, setEdges, onEdgesChange] = useEdgesState(initialEdges);
   const { fitView } = useReactFlow();
   const layoutInitialized = useRef(false);
 
   const onConnect = useCallback(
-    (params) =>
+    (params: Edge | Connection) =>
       setEdges((eds) =>
         addEdge(
           {
@@ -128,13 +147,13 @@ function LayoutFlow({ handleDatasetModalOpen, onGetConnections }) {
   );
 
   const onEdgesDelete = useCallback(
-    (edgesToRemove) =>
+    (edgesToRemove: Edge<any>[]) =>
       setEdges((eds) => eds.filter((edge) => !edgesToRemove.includes(edge))),
     [setEdges]
   );
 
   const onEdgeClick = useCallback(
-    (event, edge) => {
+    (event: { stopPropagation: () => void }, edge: { id: string }) => {
       event.stopPropagation();
       setEdges((eds) => eds.filter((e) => e.id !== edge.id));
     },
@@ -142,7 +161,7 @@ function LayoutFlow({ handleDatasetModalOpen, onGetConnections }) {
   );
 
   const onLayout = useCallback(
-    (direction) => {
+    (direction: any) => {
       const { nodes: layoutedNodes, edges: layoutedEdges } =
         getLayoutedElements(nodes, edges, {
           direction,
@@ -165,7 +184,7 @@ function LayoutFlow({ handleDatasetModalOpen, onGetConnections }) {
       document.querySelector(`[data-id="${nodes[0].id}"]`)
     ) {
       layoutInitialized.current = true;
-      onLayout();
+      onLayout("");
     }
   }, [nodes, onLayout]);
 
@@ -178,6 +197,7 @@ function LayoutFlow({ handleDatasetModalOpen, onGetConnections }) {
         sourceCount: 1,
         targetCount: 1,
         onDelete: deleteNode,
+        isInitial: false,
       },
       position: {
         x: lastNode ? lastNode.position.x : Math.random() * 400,
@@ -189,7 +209,7 @@ function LayoutFlow({ handleDatasetModalOpen, onGetConnections }) {
   };
 
   const deleteNode = useCallback(
-    (nodeId) => {
+    (nodeId: string) => {
       setNodes((nds) => nds.filter((node) => node.id !== nodeId));
       setEdges((eds) =>
         eds.filter((edge) => edge.source !== nodeId && edge.target !== nodeId)
@@ -215,7 +235,7 @@ function LayoutFlow({ handleDatasetModalOpen, onGetConnections }) {
     <>
       <div className="flex justify-between gap-3">
         <div className="flex flex-row gap-3">
-          <button className="btn " onClick={fitView}>
+          <button className="btn " onClick={() => fitView()}>
             <MagnifyingGlassPlusIcon className="h-5 w-5" />
             Fit Screen
           </button>
@@ -261,7 +281,13 @@ function LayoutFlow({ handleDatasetModalOpen, onGetConnections }) {
   );
 }
 
-const Flow = ({ onGetConnections, handleDatasetModalOpen }) => (
+const Flow = ({
+  handleDatasetModalOpen,
+  onGetConnections,
+}: {
+  handleDatasetModalOpen: any;
+  onGetConnections: any;
+}) => (
   <ReactFlowProvider>
     <LayoutFlow
       handleDatasetModalOpen={handleDatasetModalOpen}
