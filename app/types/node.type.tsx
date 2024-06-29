@@ -7,7 +7,7 @@ const typeOfNode = {
     nodeHandlerId: "LowercasingNode",
     nodeComponentName: "lowercasingNode",
     category: ToolboxCategory.Normalization,
-    tip: "Lowercase all text",
+    tip: "Lowercase text",
   },
   TokenizationNode: {
     name: "Tokenization",

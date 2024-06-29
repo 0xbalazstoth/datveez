@@ -133,9 +133,11 @@ const logEdgeConnections = (edges: any) => {
 function LayoutFlow({
   handleDatasetModalOpen,
   onGetConnections,
+  connectionType,
 }: {
   handleDatasetModalOpen: any;
   onGetConnections: any;
+  connectionType: "one-to-one" | "one-to-many";
 }) {
   const [nodes, setNodes, onNodesChange] = useNodesState(initialNodes);
   const [edges, setEdges, onEdgesChange] = useEdgesState(initialEdges);
@@ -143,18 +145,39 @@ function LayoutFlow({
   const layoutInitialized = useRef(false);
 
   const onConnect = useCallback(
-    (params: Edge | Connection) =>
-      setEdges((eds) =>
-        addEdge(
-          {
-            ...params,
-            type: "custom",
-            markerEnd: { type: MarkerType.ArrowClosed },
-          },
-          eds
-        )
-      ),
-    [setEdges]
+    (params: Edge | Connection) => {
+      const { source, target } = params;
+
+      if (connectionType === "one-to-one") {
+        const sourceConnected = edges.some((edge) => edge.source === source);
+        const targetConnected = edges.some((edge) => edge.target === target);
+
+        if (!sourceConnected && !targetConnected) {
+          setEdges((eds) =>
+            addEdge(
+              {
+                ...params,
+                type: "custom",
+                markerEnd: { type: MarkerType.ArrowClosed },
+              },
+              eds
+            )
+          );
+        }
+      } else {
+        setEdges((eds) =>
+          addEdge(
+            {
+              ...params,
+              type: "custom",
+              markerEnd: { type: MarkerType.ArrowClosed },
+            },
+            eds
+          )
+        );
+      }
+    },
+    [connectionType, edges, setEdges]
   );
 
   const onEdgesDelete = useCallback(
@@ -354,6 +377,7 @@ const Flow = ({
     <LayoutFlow
       handleDatasetModalOpen={handleDatasetModalOpen}
       onGetConnections={onGetConnections}
+      connectionType="one-to-one"
     />
   </ReactFlowProvider>
 );
