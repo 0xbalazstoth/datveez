@@ -300,11 +300,6 @@ function LayoutFlow({
             Fit Screen
           </button>
 
-          {/* <button className="btn " onClick={addNode}>
-            <PlusIcon className="h-5 w-5" />
-            Add Node
-          </button> */}
-
           <button
             className="btn border-2 bg-white text-black hover:bg-gray-100"
             onClick={handleDatasetModalOpen}

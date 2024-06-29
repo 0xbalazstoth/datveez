@@ -8,20 +8,20 @@ function LowercasingNode() {
   return (
     <ToolboxItem
       id={Math.random().toString()}
-      name="Lowercasing"
-      category={ToolboxCategory.Normalization}
+      name={typeOfNode.LowercasingNode.name}
+      category={typeOfNode.LowercasingNode.category}
     >
       <Handle
         type="target"
         position={Position.Top}
         className="w-16 !bg-accent"
-        id={`target-${typeOfNode.LowercasingNode}`}
+        id={typeOfNode.LowercasingNode.nodeHandlerId}
       />
       <Handle
         type="source"
         position={Position.Bottom}
         className="w-16 !bg-red-300"
-        id={`source-${typeOfNode.LowercasingNode}`}
+        id={typeOfNode.LowercasingNode.nodeHandlerId}
       />
     </ToolboxItem>
   );

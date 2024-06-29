@@ -15,6 +15,7 @@ import { ToastType } from "../types/toast.type";
 import StepIndicator from "../steps/step.indicator";
 import { StepsProvider, useSteps } from "../contexts/steps.context";
 import { StepName } from "../types/step.type";
+import typeOfNode from "../types/node.type";
 
 interface StepsPageProps {}
 
@@ -102,17 +103,24 @@ const StepsPageContent = (props: StepsPageProps) => {
           <div className="flex flex-col gap-2 mt-10">
             <ToolboxItem
               id={Math.random().toString()}
-              name="Lowercasing"
-              category={ToolboxCategory.Normalization}
-              tip="Lowercase all text"
-              onDragStart={(event) => onDragStart(event, "lowercasingNode")}
+              name={typeOfNode.LowercasingNode.name}
+              category={typeOfNode.LowercasingNode.category}
+              tip={typeOfNode.LowercasingNode.tip}
+              onDragStart={(event) =>
+                onDragStart(event, typeOfNode.LowercasingNode.nodeComponentName)
+              }
             ></ToolboxItem>
             <ToolboxItem
               id={Math.random().toString()}
-              name="Tokenization"
-              category={ToolboxCategory.Tokenization}
-              tip="Tokenize text into words"
-              onDragStart={(event) => onDragStart(event, "tokenizationNode")}
+              name={typeOfNode.TokenizationNode.name}
+              category={typeOfNode.TokenizationNode.category}
+              tip={typeOfNode.TokenizationNode.tip}
+              onDragStart={(event) =>
+                onDragStart(
+                  event,
+                  typeOfNode.TokenizationNode.nodeComponentName
+                )
+              }
             ></ToolboxItem>
             <ToolboxItem
               id={Math.random().toString()}
