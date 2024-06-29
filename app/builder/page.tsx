@@ -1,4 +1,3 @@
-// pages/steps.tsx
 "use client";
 
 import { useEffect, useState } from "react";
@@ -99,19 +98,21 @@ const StepsPageContent = (props: StepsPageProps) => {
               name="Lowercasing"
               category={ToolboxCategory.Remove}
               tip="Lowercase all text"
-              onDragStart={(event) => onDragStart(event, "Lowercasing")}
+              onDragStart={(event) => onDragStart(event, "lowercasingNode")}
             ></ToolboxItem>
             <ToolboxItem
               id={Math.random().toString()}
               name="Tokenization"
               category={ToolboxCategory.Tokenization}
               tip="Tokenize text into words"
+              onDragStart={(event) => onDragStart(event, "Tokenization")}
             ></ToolboxItem>
             <ToolboxItem
               id={Math.random().toString()}
               name="Normalization"
               category={ToolboxCategory.Normalization}
               tip="Normalize text by removing special characters"
+              onDragStart={(event) => onDragStart(event, "Normalization")}
             ></ToolboxItem>
           </div>
         </Sidebar>

@@ -34,9 +34,11 @@ import {
 
 import "reactflow/dist/style.css";
 import typeOfNode from "../types/node.type";
+import lowercasingNode from "../nodes/toolbox.lowercasing.node";
 
 const nodeTypes = {
   selectorNode: CustomNode,
+  lowercasingNode: lowercasingNode,
 };
 
 const edgeTypes: EdgeTypes = {
