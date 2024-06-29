@@ -10,6 +10,7 @@ export default function BuilderStep(props: BuilderStepProps) {
   const {} = props;
   const { uploadedFile, fileData } = useSteps();
   const datasetModalRef = useRef<HTMLDialogElement>(null);
+  const { setDraftConnections } = useSteps();
 
   const handleDatasetModalOpen = () => {
     datasetModalRef.current?.showModal();
@@ -21,6 +22,8 @@ export default function BuilderStep(props: BuilderStepProps) {
 
   const handleGetConnections = (connections: any) => {
     console.log("Connections from Flow:", connections);
+
+    setDraftConnections(connections);
   };
 
   return (

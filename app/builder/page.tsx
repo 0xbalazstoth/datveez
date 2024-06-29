@@ -5,13 +5,10 @@ import ToolboxItem from "../components/toolbox.item";
 import StepsLayout from "../layouts/steps.layout";
 import Sidebar from "../components/sidebar";
 import Steps from "../components/steps";
-import { ToolboxCategory } from "../types/toolbox.categories.type";
 import SmallScreenMessage from "../components/small.screen.message";
 import BuilderStep from "../steps/builder.step";
 import UploadStep from "../steps/upload.step";
 import NormalizeStep from "../steps/normalize.step";
-import Toast from "../components/toast";
-import { ToastType } from "../types/toast.type";
 import StepIndicator from "../steps/step.indicator";
 import { StepsProvider, useSteps } from "../contexts/steps.context";
 import { StepName } from "../types/step.type";
@@ -22,14 +19,17 @@ interface StepsPageProps {}
 const StepsPageContent = (props: StepsPageProps) => {
   const {} = props;
 
-  const { steps, currentStepIndex, uploadedFile } = useSteps();
+  const { steps, currentStepIndex, uploadedFile, draftConnections } =
+    useSteps();
 
   const [isScreenSmall, setIsScreenSmall] = useState(false);
   const [isClient, setIsClient] = useState(false);
+  const [disabledItems, setDisabledItems] = useState<string[]>([]);
 
   const onDragStart = (
     event: React.DragEvent<HTMLDivElement>,
-    nodeType: string
+    nodeType: string,
+    id: string
   ) => {
     const target = `target-${nodeType}`;
     const source = `source-${nodeType}`;
@@ -37,6 +37,9 @@ const StepsPageContent = (props: StepsPageProps) => {
     event.dataTransfer.setData("target", target);
     event.dataTransfer.setData("source", source);
     event.dataTransfer.effectAllowed = "move";
+
+    // Disable the item after drag
+    setDisabledItems((prev) => [...prev, id]);
   };
 
   useEffect(() => {
@@ -102,32 +105,34 @@ const StepsPageContent = (props: StepsPageProps) => {
         <Sidebar>
           <div className="flex flex-col gap-2 mt-10">
             <ToolboxItem
-              id={Math.random().toString()}
+              id={typeOfNode.LowercasingNode.name}
               name={typeOfNode.LowercasingNode.name}
               category={typeOfNode.LowercasingNode.category}
               tip={typeOfNode.LowercasingNode.tip}
               onDragStart={(event) =>
-                onDragStart(event, typeOfNode.LowercasingNode.nodeComponentName)
+                onDragStart(
+                  event,
+                  typeOfNode.LowercasingNode.nodeComponentName,
+                  typeOfNode.LowercasingNode.name
+                )
               }
+              // disabled={disabledItems.includes(typeOfNode.LowercasingNode.name)}
             ></ToolboxItem>
             <ToolboxItem
-              id={Math.random().toString()}
+              id={typeOfNode.TokenizationNode.name}
               name={typeOfNode.TokenizationNode.name}
               category={typeOfNode.TokenizationNode.category}
               tip={typeOfNode.TokenizationNode.tip}
               onDragStart={(event) =>
                 onDragStart(
                   event,
-                  typeOfNode.TokenizationNode.nodeComponentName
+                  typeOfNode.TokenizationNode.nodeComponentName,
+                  typeOfNode.TokenizationNode.name
                 )
               }
-            ></ToolboxItem>
-            <ToolboxItem
-              id={Math.random().toString()}
-              name="Normalization"
-              category={ToolboxCategory.Normalization}
-              tip="Normalize text by removing special characters"
-              onDragStart={(event) => onDragStart(event, "Normalization")}
+              // disabled={disabledItems.includes(
+              //   typeOfNode.TokenizationNode.name
+              // )}
             ></ToolboxItem>
           </div>
         </Sidebar>

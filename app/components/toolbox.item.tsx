@@ -8,6 +8,7 @@ interface ToolboxItemProps {
   id: string;
   onDragStart?: (event: React.DragEvent<HTMLDivElement>, id: string) => void;
   children?: React.ReactNode;
+  disabled?: boolean;
 }
 
 const categories = [
@@ -34,6 +35,7 @@ export default function ToolboxItem(props: ToolboxItemProps) {
     onDragStart,
     id,
     children,
+    disabled = false,
   } = props;
 
   return (
@@ -41,10 +43,12 @@ export default function ToolboxItem(props: ToolboxItemProps) {
       className={`bg-base-200 rounded-lg p-2 border-l-4 border-accent dndnode ${
         isDropped ? "w-[250px]" : ""
       } ${!isDropped ? "tooltip" : ""}`}
-      draggable={onDragStart ? true : false}
+      draggable={!disabled && onDragStart ? true : false}
       {...(tip ? { "data-tip": tip } : {})}
-      onDragStart={(event) => onDragStart && onDragStart(event, id)}
-      style={{ transform: "translate(0px, 0px)" }}
+      onDragStart={(event) =>
+        !disabled && onDragStart && onDragStart(event, id)
+      }
+      style={{ transform: "translate(0px, 0px)", opacity: disabled ? 0.5 : 1 }}
     >
       <div className="flex gap-4 items-center justify-between">
         <div>

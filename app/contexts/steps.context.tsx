@@ -22,6 +22,8 @@ interface StepsContextProps {
   setFileStats: React.Dispatch<React.SetStateAction<FileStat | null>>;
   fileData: any[] | null;
   setFileData: React.Dispatch<React.SetStateAction<any[] | null>>;
+  setDraftConnections: React.Dispatch<React.SetStateAction<any[]>>;
+  draftConnections: any;
 }
 
 const StepsContext = createContext<StepsContextProps | undefined>(undefined);
@@ -53,6 +55,7 @@ export const StepsProvider = ({ children }: { children: ReactNode }) => {
   const [uploadedFile, setUploadedFile] = useState<File | null>(null);
   const [fileStats, setFileStats] = useState<FileStat | null>(null);
   const [fileData, setFileData] = useState<any[] | null>(null);
+  const [draftConnections, setDraftConnections] = useState<any[]>([]);
 
   useEffect(() => {
     const savedSteps = localStorage.getItem("steps");
@@ -107,6 +110,8 @@ export const StepsProvider = ({ children }: { children: ReactNode }) => {
         setFileStats,
         fileData,
         setFileData,
+        setDraftConnections,
+        draftConnections,
       }}
     >
       {children}

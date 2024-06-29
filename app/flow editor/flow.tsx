@@ -20,10 +20,12 @@ import ReactFlow, {
   MiniMap,
   Controls,
   Background,
+  ReactFlowInstance,
 } from "reactflow";
 import { MarkerType } from "reactflow";
 import InitialNode from "./node";
 import CustomEdge from "./edge";
+import { IoSaveOutline } from "react-icons/io5";
 
 import {
   PlusIcon,
@@ -141,8 +143,34 @@ function LayoutFlow({
 }) {
   const [nodes, setNodes, onNodesChange] = useNodesState(initialNodes);
   const [edges, setEdges, onEdgesChange] = useEdgesState(initialEdges);
-  const { fitView, screenToFlowPosition } = useReactFlow();
+  const { fitView, screenToFlowPosition, setViewport } = useReactFlow();
   const layoutInitialized = useRef(false);
+
+  const [rfInstance, setRfInstance] = useState<ReactFlowInstance | null>(null);
+
+  const flowKey = "flow";
+
+  const saveFlow = useCallback(() => {
+    if (rfInstance) {
+      const flow = rfInstance.toObject();
+      localStorage.setItem(flowKey, JSON.stringify(flow));
+    }
+  }, [rfInstance]);
+
+  const onRestore = useCallback(() => {
+    const restoreFlow = async () => {
+      const flow = JSON.parse(localStorage.getItem(flowKey) ?? "");
+
+      if (flow) {
+        const { x = 0, y = 0, zoom = 1 } = flow.viewport;
+        setNodes(flow.nodes || []);
+        setEdges(flow.edges || []);
+        setViewport({ x, y, zoom });
+      }
+    };
+
+    restoreFlow();
+  }, [setEdges, setNodes, setViewport]);
 
   const onConnect = useCallback(
     (params: Edge | Connection) => {
@@ -163,6 +191,7 @@ function LayoutFlow({
               eds
             )
           );
+          saveFlow();
         }
       } else {
         setEdges((eds) =>
@@ -175,23 +204,27 @@ function LayoutFlow({
             eds
           )
         );
+        saveFlow();
       }
     },
-    [connectionType, edges, setEdges]
+    [connectionType, edges, setEdges, saveFlow]
   );
 
   const onEdgesDelete = useCallback(
-    (edgesToRemove: Edge<any>[]) =>
-      setEdges((eds) => eds.filter((edge) => !edgesToRemove.includes(edge))),
-    [setEdges]
+    (edgesToRemove: Edge<any>[]) => {
+      setEdges((eds) => eds.filter((edge) => !edgesToRemove.includes(edge)));
+      saveFlow();
+    },
+    [setEdges, saveFlow]
   );
 
   const onEdgeClick = useCallback(
     (event: { stopPropagation: () => void }, edge: { id: string }) => {
       event.stopPropagation();
       setEdges((eds) => eds.filter((e) => e.id !== edge.id));
+      saveFlow();
     },
-    [setEdges]
+    [setEdges, saveFlow]
   );
 
   const onLayout = useCallback(
@@ -206,9 +239,10 @@ function LayoutFlow({
 
       window.requestAnimationFrame(() => {
         fitView();
+        saveFlow();
       });
     },
-    [nodes, edges, setNodes, setEdges, fitView]
+    [nodes, edges, setNodes, setEdges, fitView, saveFlow]
   );
 
   useEffect(() => {
@@ -222,25 +256,9 @@ function LayoutFlow({
     }
   }, [nodes, onLayout]);
 
-  const addNode = () => {
-    const lastNode = nodes[nodes.length - 1];
-    const newNode = {
-      id: `node-${nodes.length + 1}`,
-      data: {
-        label: `Node ${nodes.length + 1}`,
-        sourceCount: 1,
-        targetCount: 1,
-        onDelete: deleteNode,
-        isInitial: false,
-      },
-      position: {
-        x: lastNode ? lastNode.position.x : Math.random() * 200,
-        y: lastNode ? lastNode.position.y + 50 : Math.random() * 200,
-      },
-      type: "selectorNode",
-    };
-    setNodes((nds) => nds.concat(newNode));
-  };
+  useEffect(() => {
+    onRestore();
+  }, [onRestore]);
 
   const deleteNode = useCallback(
     (nodeId: string) => {
@@ -248,13 +266,15 @@ function LayoutFlow({
       setEdges((eds) =>
         eds.filter((edge) => edge.source !== nodeId && edge.target !== nodeId)
       );
+      saveFlow();
     },
-    [setNodes, setEdges]
+    [setNodes, setEdges, saveFlow]
   );
 
   const clearAllExceptDataset = () => {
     setNodes((nds) => nds.filter((node) => node.data.isInitial));
     setEdges([]);
+    saveFlow();
   };
 
   useEffect(() => {
@@ -263,7 +283,8 @@ function LayoutFlow({
     logEdgeConnections(edges);
 
     onGetConnections(edges);
-  }, [nodes, edges, onGetConnections]);
+    saveFlow();
+  }, [nodes, edges, onGetConnections, saveFlow]);
 
   const nodeClassName = (node: any) => node.type;
 
@@ -310,8 +331,9 @@ function LayoutFlow({
       };
 
       setNodes((nds) => nds.concat(newNode));
+      saveFlow();
     },
-    [screenToFlowPosition, setNodes]
+    [screenToFlowPosition, setNodes, saveFlow]
   );
 
   return (
@@ -321,6 +343,11 @@ function LayoutFlow({
           <button className="btn " onClick={() => fitView()}>
             <MagnifyingGlassPlusIcon className="h-5 w-5" />
             Fit Screen
+          </button>
+
+          <button className="btn btn-accent" onClick={saveFlow}>
+            <IoSaveOutline className="h-5 w-5" />
+            Save
           </button>
 
           <button
@@ -357,6 +384,7 @@ function LayoutFlow({
         attributionPosition="top-right"
         onDrop={onDrop}
         onDragOver={onDragOver}
+        onInit={setRfInstance}
       >
         <MiniMap zoomable pannable nodeClassName={nodeClassName}></MiniMap>
         <Controls></Controls>
