@@ -6,6 +6,7 @@ interface ToolboxItemProps {
   isDropped?: boolean;
   tip: string;
   id: string;
+  onDragStart?: (event: React.DragEvent<HTMLDivElement>, id: string) => void;
 }
 
 const categories = [
@@ -24,14 +25,16 @@ const categories = [
 ];
 
 export default function ToolboxItem(props: ToolboxItemProps) {
-  const { name, category, isDropped = false, tip } = props;
+  const { name, category, isDropped = false, tip, onDragStart, id } = props;
 
   return (
     <div
-      className={`bg-base-200 rounded-lg p-2 border-l-4 border-accent ${
+      className={`bg-base-200 rounded-lg p-2 border-l-4 border-accent dndnode ${
         isDropped ? "w-[250px]" : ""
       } ${!isDropped ? "tooltip" : ""}`}
-      data-tip={!isDropped ? tip : ""}
+      draggable={onDragStart ? true : false}
+      onDragStart={(event) => onDragStart && onDragStart(event, id)}
+      style={{ transform: "translate(0px, 0px)" }}
     >
       <div className="flex gap-4 items-center justify-between">
         <div>

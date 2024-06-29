@@ -27,6 +27,11 @@ const StepsPageContent = (props: StepsPageProps) => {
   const [isScreenSmall, setIsScreenSmall] = useState(false);
   const [isClient, setIsClient] = useState(false);
 
+  const onDragStart = (event: any, nodeType: any) => {
+    event.dataTransfer.setData("application/reactflow", nodeType);
+    event.dataTransfer.effectAllowed = "move";
+  };
+
   useEffect(() => {
     setIsClient(true);
 
@@ -94,6 +99,7 @@ const StepsPageContent = (props: StepsPageProps) => {
               name="Lowercasing"
               category={ToolboxCategory.Remove}
               tip="Lowercase all text"
+              onDragStart={(event) => onDragStart(event, "Lowercasing")}
             ></ToolboxItem>
             <ToolboxItem
               id={Math.random().toString()}
@@ -110,18 +116,6 @@ const StepsPageContent = (props: StepsPageProps) => {
           </div>
         </Sidebar>
       </div>
-
-      {uploadedFile ? (
-        <Toast
-          type={ToastType.Success}
-          message={`Using dataset: ${uploadedFile?.name}`}
-        ></Toast>
-      ) : (
-        <Toast
-          type={ToastType.Warning}
-          message="Please upload a dataset to continue."
-        ></Toast>
-      )}
     </StepsLayout>
   );
 };

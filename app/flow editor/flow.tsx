@@ -17,6 +17,9 @@ import ReactFlow, {
   Edge,
   EdgeTypes,
   EdgeProps,
+  MiniMap,
+  Controls,
+  Background,
 } from "reactflow";
 import { MarkerType } from "reactflow";
 import CustomNode from "./node";
@@ -39,6 +42,9 @@ const nodeTypes = {
 const edgeTypes: EdgeTypes = {
   selectorEdge: CustomEdge as ComponentType<EdgeProps>,
 };
+
+let id = 0;
+const getId = () => `dndnode_${id++}`;
 
 const defaultEdgeOptions = {
   animated: true,
@@ -129,7 +135,7 @@ function LayoutFlow({
 }) {
   const [nodes, setNodes, onNodesChange] = useNodesState(initialNodes);
   const [edges, setEdges, onEdgesChange] = useEdgesState(initialEdges);
-  const { fitView } = useReactFlow();
+  const { fitView, screenToFlowPosition } = useReactFlow();
   const layoutInitialized = useRef(false);
 
   const onConnect = useCallback(
@@ -201,8 +207,8 @@ function LayoutFlow({
         isInitial: false,
       },
       position: {
-        x: lastNode ? lastNode.position.x : Math.random() * 400,
-        y: lastNode ? lastNode.position.y + 100 : Math.random() * 400,
+        x: lastNode ? lastNode.position.x : Math.random() * 200,
+        y: lastNode ? lastNode.position.y + 50 : Math.random() * 200,
       },
       type: "selectorNode",
     };
@@ -231,6 +237,55 @@ function LayoutFlow({
 
     onGetConnections(edges);
   }, [nodes, edges, onGetConnections]);
+
+  const nodeClassName = (node: any) => node.type;
+
+  const onDragOver = useCallback(
+    (event: {
+      preventDefault: () => void;
+      dataTransfer: { dropEffect: string };
+    }) => {
+      event.preventDefault();
+      event.dataTransfer.dropEffect = "move";
+    },
+    []
+  );
+
+  const onDrop = useCallback(
+    (event: {
+      preventDefault: () => void;
+      dataTransfer: { getData: (arg0: string) => any };
+      clientX: any;
+      clientY: any;
+    }) => {
+      event.preventDefault();
+
+      const type = event.dataTransfer.getData("application/reactflow");
+
+      if (typeof type === "undefined" || !type) {
+        return;
+      }
+
+      const position = screenToFlowPosition({
+        x: event.clientX,
+        y: event.clientY,
+      });
+      const newNode = {
+        id: getId(),
+        type,
+        position,
+        data: {
+          label: `${type} node`,
+          sourceCount: 1,
+          targetCount: 1,
+          isInitial: false,
+        },
+      };
+
+      setNodes((nds) => nds.concat(newNode));
+    },
+    [screenToFlowPosition, setNodes]
+  );
 
   return (
     <>
@@ -262,7 +317,7 @@ function LayoutFlow({
         </div>
       </div>
       <ReactFlow
-        className="inset-0 flex-grow rounded-lg bg-transparent bg-[radial-gradient(#d1d5db_1px,transparent_1px)] [background-size:16px_16px]"
+        className="inset-0 flex-grow rounded-lg bg-transparent"
         nodes={nodes.map((node) => ({
           ...node,
           data: { ...node.data, onDelete: deleteNode },
@@ -277,7 +332,14 @@ function LayoutFlow({
         nodeTypes={nodeTypes}
         edgeTypes={edgeTypes}
         defaultEdgeOptions={defaultEdgeOptions}
-      />
+        attributionPosition="top-right"
+        onDrop={onDrop}
+        onDragOver={onDragOver}
+      >
+        <MiniMap zoomable pannable nodeClassName={nodeClassName}></MiniMap>
+        <Controls></Controls>
+        <Background></Background>
+      </ReactFlow>
     </>
   );
 }
