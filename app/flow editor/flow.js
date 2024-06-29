@@ -15,6 +15,7 @@ import {
   PlusIcon,
   MagnifyingGlassPlusIcon,
   CircleStackIcon,
+  XMarkIcon,
 } from "@heroicons/react/24/outline";
 
 import "reactflow/dist/style.css";
@@ -197,6 +198,11 @@ function LayoutFlow({ handleDatasetModalOpen, onGetConnections }) {
     [setNodes, setEdges]
   );
 
+  const clearAllExceptDataset = () => {
+    setNodes((nds) => nds.filter((node) => node.data.isInitial));
+    setEdges([]);
+  };
+
   useEffect(() => {
     const path = getOrderedPath(nodes, edges);
     console.log("Ordered Path:", path);
@@ -207,22 +213,32 @@ function LayoutFlow({ handleDatasetModalOpen, onGetConnections }) {
 
   return (
     <>
-      <div className="flex gap-3">
-        <button className="btn " onClick={fitView}>
-          <MagnifyingGlassPlusIcon className="h-5 w-5" />
-          Fit Screen
-        </button>
-        <button className="btn " onClick={addNode}>
-          <PlusIcon className="h-5 w-5" />
-          Add Node
-        </button>
-        <button
-          className="btn border-2 bg-white text-black hover:bg-gray-100"
-          onClick={handleDatasetModalOpen}
-        >
-          <CircleStackIcon className="h-5 w-5" />
-          Dataset parameters
-        </button>
+      <div className="flex justify-between gap-3">
+        <div className="flex flex-row gap-3">
+          <button className="btn " onClick={fitView}>
+            <MagnifyingGlassPlusIcon className="h-5 w-5" />
+            Fit Screen
+          </button>
+
+          <button className="btn " onClick={addNode}>
+            <PlusIcon className="h-5 w-5" />
+            Add Node
+          </button>
+
+          <button
+            className="btn border-2 bg-white text-black hover:bg-gray-100"
+            onClick={handleDatasetModalOpen}
+          >
+            <CircleStackIcon className="h-5 w-5" />
+            Dataset parameters
+          </button>
+        </div>
+        <div className="flex flex-row gap-3">
+          <button className="btn" onClick={clearAllExceptDataset}>
+            <XMarkIcon className="h-5 w-5" />
+            Clear
+          </button>
+        </div>
       </div>
       <ReactFlow
         className="inset-0 flex-grow rounded-lg bg-transparent bg-[radial-gradient(#d1d5db_1px,transparent_1px)] [background-size:16px_16px]"

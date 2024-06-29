@@ -76,9 +76,11 @@ const StepsPageContent = (props: StepsPageProps) => {
               <Steps steps={steps}></Steps>
             </div>
 
-            <div className="ml-auto badge badge-neutral p-4 text-white font-bold">
-              Navigate with arrow keys!
-            </div>
+            {uploadedFile ? (
+              <div className="ml-auto badge badge-neutral p-4 text-white font-bold">
+                Navigate with arrow keys!
+              </div>
+            ) : null}
           </div>
 
           <div className="divider"></div>
@@ -109,8 +111,6 @@ const StepsPageContent = (props: StepsPageProps) => {
           </div>
         </Sidebar>
       </div>
-
-      {/* switch case uploadedFile is not undefined/null */}
 
       {uploadedFile ? (
         <Toast

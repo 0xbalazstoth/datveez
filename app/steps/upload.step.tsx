@@ -2,6 +2,7 @@ import {
   TrashIcon,
   ChartBarSquareIcon,
   DocumentTextIcon,
+  FolderOpenIcon,
 } from "@heroicons/react/24/outline";
 import { useSteps } from "../contexts/steps.context";
 import { useState, useRef, useEffect } from "react";
@@ -9,13 +10,84 @@ import Papa from "papaparse";
 
 interface UploadStepProps {}
 
+type FileStats = {
+  rowCount: number;
+  columnCount: number;
+  columns: string[];
+  uniqueValues: { [key: string]: number };
+  fileSize: string;
+};
+
 export default function UploadStep(props: UploadStepProps) {
   const {} = props;
-  const { uploadedFile, setUploadedFile } = useSteps();
+  const {
+    uploadedFile,
+    setUploadedFile,
+    fileStats,
+    setFileStats,
+    fileData,
+    setFileData,
+  } = useSteps();
   const [error, setError] = useState<string | null>(null);
-  const [fileStats, setFileStats] = useState<any | null>(null);
-  const [fileData, setFileData] = useState<any[] | null>(null);
   const fileInputRef = useRef<HTMLInputElement>(null);
+
+  useEffect(() => {
+    if (uploadedFile && !fileStats && !fileData) {
+      parseFile(uploadedFile);
+    }
+  }, [uploadedFile]);
+
+  const parseFile = (file: File) => {
+    const uniqueValues: { [key: string]: Set<string> } = {};
+    let rowCount = 0;
+    let columnCount = 0;
+    let columns: string[] = [];
+    const aggregatedData: any[] = [];
+
+    Papa.parse(file, {
+      header: true,
+      worker: true,
+      chunkSize: 1024 * 1024, // 1 MB chunks
+      chunk: (results, parser) => {
+        if (results.meta.fields) {
+          if (rowCount === 0) {
+            columns = results.meta.fields;
+            columnCount = columns.length;
+            columns.forEach((field) => {
+              uniqueValues[field] = new Set<string>();
+            });
+          }
+          results.data.forEach((row: any) => {
+            aggregatedData.push(row);
+            columns.forEach((field: string) => {
+              uniqueValues[field].add(row[field]);
+            });
+          });
+          rowCount += results.data.length;
+        }
+      },
+      complete: () => {
+        const stats = {
+          rowCount,
+          columnCount,
+          columns,
+          uniqueValues: Object.fromEntries(
+            Object.entries(uniqueValues).map(([key, value]) => [
+              key,
+              value.size,
+            ])
+          ),
+          fileSize: (file.size / 1024).toFixed(2) + " KB",
+        };
+
+        setFileStats(stats);
+        setFileData(aggregatedData); // Store all data if needed
+      },
+      error: (error) => {
+        setError(`Error parsing file: ${error.message}`);
+      },
+    });
+  };
 
   const handleFileUpload = (event: React.ChangeEvent<HTMLInputElement>) => {
     const file = event.target.files?.[0];
@@ -26,25 +98,6 @@ export default function UploadStep(props: UploadStepProps) {
       }
       setUploadedFile(file);
       setError(null);
-
-      const reader = new FileReader();
-      reader.onload = (e) => {
-        const text = e.target?.result;
-        if (text) {
-          Papa.parse(text.toString(), {
-            header: true,
-            complete: (result) => {
-              setFileStats({
-                rowCount: result.data.length,
-                columnCount: result.meta.fields ? result.meta.fields.length : 0,
-                columns: result.meta.fields || [],
-              });
-              setFileData(result.data);
-            },
-          });
-        }
-      };
-      reader.readAsText(file);
     }
   };
 
@@ -86,26 +139,28 @@ export default function UploadStep(props: UploadStepProps) {
           <h1 className="text-2xl font-bold text-black">Dataset Statistics</h1>
           <div className="stats shadow">
             <div className="stat">
-              <div className="stat-figure text-secondary">
+              <div className="stat-figure text-accent">
                 <DocumentTextIcon className="h-8 w-8" />
               </div>
               <div className="stat-title">Total Rows</div>
-              <div className="stat-value">{fileStats.rowCount}</div>
+              <div className="stat-value">{fileStats?.rowCount}</div>
             </div>
 
             <div className="stat">
-              <div className="stat-figure text-secondary">
-                <ChartBarSquareIcon className="h-8 w-8" />
+              <div className="stat-figure text-accent">
+                <FolderOpenIcon className="h-8 w-8" />
               </div>
-              <div className="stat-title">Total Columns</div>
-              <div className="stat-value">{fileStats.columnCount}</div>
+              <div className="stat-title">File Size</div>
+              <div className="stat-value">{fileStats?.fileSize}</div>
             </div>
 
             <div className="stat">
-              <div className="stat-figure text-secondary">
+              <div className="stat-figure text-accent">
                 <ChartBarSquareIcon className="h-8 w-8" />
               </div>
-              <div className="stat-title">Columns</div>
+              <div className="stat-title">
+                Columns ({fileStats?.columnCount})
+              </div>
               <div className="stat-value text-sm">
                 {fileStats.columns.join(", ")}
               </div>
@@ -114,9 +169,9 @@ export default function UploadStep(props: UploadStepProps) {
         </div>
       )}
 
-      {fileData && (
-        <div className="flex flex-col gap-2">
-          <h1 className="text-2xl font-bold text-black">Dataset preview</h1>
+      {fileData && fileData.length > 0 && (
+        <div className="flex flex-col gap-2 mb-[75px]">
+          <h1 className="text-2xl font-bold text-black">Dataset Preview</h1>
           <span className="text-black">
             Showing the first 10 rows of the dataset.
           </span>
@@ -124,7 +179,7 @@ export default function UploadStep(props: UploadStepProps) {
             <table className="table table-xs table-zebra table-pin-rows">
               <thead>
                 <tr>
-                  {fileStats.columns.map((col: string, index: number) => (
+                  {fileStats!.columns.map((col: string, index: number) => (
                     <th key={index}>{col}</th>
                   ))}
                 </tr>
@@ -132,7 +187,7 @@ export default function UploadStep(props: UploadStepProps) {
               <tbody>
                 {fileData.slice(0, 10).map((row, rowIndex) => (
                   <tr key={rowIndex}>
-                    {fileStats.columns.map((col: string, colIndex: number) => (
+                    {fileStats!.columns.map((col: string, colIndex: number) => (
                       <td key={colIndex}>{row[col]}</td>
                     ))}
                   </tr>

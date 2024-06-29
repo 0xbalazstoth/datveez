@@ -14,7 +14,7 @@ export default function StepIndicator() {
 
   useEffect(() => {
     const handleKeyDown = (e: KeyboardEvent) => {
-      if (e.key === "ArrowRight") {
+      if (e.key === "ArrowRight" && uploadedFile !== null) {
         goToNextStep();
       } else if (e.key === "ArrowLeft") {
         goToPreviousStep();
@@ -26,7 +26,7 @@ export default function StepIndicator() {
     return () => {
       document.removeEventListener("keydown", handleKeyDown);
     };
-  }, [goToNextStep, goToPreviousStep]);
+  }, [goToNextStep, goToPreviousStep, uploadedFile]);
 
   return (
     <div className="flex flex-row gap-3">
