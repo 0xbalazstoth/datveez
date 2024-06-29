@@ -26,8 +26,15 @@ const StepsPageContent = (props: StepsPageProps) => {
   const [isScreenSmall, setIsScreenSmall] = useState(false);
   const [isClient, setIsClient] = useState(false);
 
-  const onDragStart = (event: any, nodeType: any) => {
+  const onDragStart = (
+    event: React.DragEvent<HTMLDivElement>,
+    nodeType: string
+  ) => {
+    const target = `target-${nodeType}`;
+    const source = `source-${nodeType}`;
     event.dataTransfer.setData("application/reactflow", nodeType);
+    event.dataTransfer.setData("target", target);
+    event.dataTransfer.setData("source", source);
     event.dataTransfer.effectAllowed = "move";
   };
 
@@ -96,7 +103,7 @@ const StepsPageContent = (props: StepsPageProps) => {
             <ToolboxItem
               id={Math.random().toString()}
               name="Lowercasing"
-              category={ToolboxCategory.Remove}
+              category={ToolboxCategory.Normalization}
               tip="Lowercase all text"
               onDragStart={(event) => onDragStart(event, "lowercasingNode")}
             ></ToolboxItem>
@@ -105,7 +112,7 @@ const StepsPageContent = (props: StepsPageProps) => {
               name="Tokenization"
               category={ToolboxCategory.Tokenization}
               tip="Tokenize text into words"
-              onDragStart={(event) => onDragStart(event, "Tokenization")}
+              onDragStart={(event) => onDragStart(event, "tokenizationNode")}
             ></ToolboxItem>
             <ToolboxItem
               id={Math.random().toString()}

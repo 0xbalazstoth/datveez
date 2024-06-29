@@ -22,7 +22,7 @@ import ReactFlow, {
   Background,
 } from "reactflow";
 import { MarkerType } from "reactflow";
-import CustomNode from "./node";
+import InitialNode from "./node";
 import CustomEdge from "./edge";
 
 import {
@@ -34,11 +34,13 @@ import {
 
 import "reactflow/dist/style.css";
 import typeOfNode from "../types/node.type";
-import lowercasingNode from "../nodes/toolbox.lowercasing.node";
+import lowercasingNode from "./toolbox.lowercasing.node";
+import tokenizationNode from "./toolbox.tokenization.node";
 
 const nodeTypes = {
-  selectorNode: CustomNode,
+  selectorNode: InitialNode,
   lowercasingNode: lowercasingNode,
+  tokenizationNode: tokenizationNode,
 };
 
 const edgeTypes: EdgeTypes = {
@@ -298,10 +300,10 @@ function LayoutFlow({
             Fit Screen
           </button>
 
-          <button className="btn " onClick={addNode}>
+          {/* <button className="btn " onClick={addNode}>
             <PlusIcon className="h-5 w-5" />
             Add Node
-          </button>
+          </button> */}
 
           <button
             className="btn border-2 bg-white text-black hover:bg-gray-100"

@@ -1,5 +1,5 @@
 import { MinusIcon, TrashIcon } from "@heroicons/react/24/outline";
-import React, { memo, useState } from "react";
+import React, { memo, useEffect, useState } from "react";
 import { Handle, Position } from "reactflow";
 
 const charIds = ["a", "b", "c", "d"];
