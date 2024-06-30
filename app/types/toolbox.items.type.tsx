@@ -8,7 +8,7 @@ export interface ToolboxItemType {
   onDragStart: (event: React.DragEvent<HTMLDivElement>) => void;
   icon: string;
   borderColor: string;
-  onClick?: () => void;
+  onDoubleClick?: () => void;
 }
 
 export const createNormalizationToolboxItems = (
@@ -16,7 +16,6 @@ export const createNormalizationToolboxItems = (
     event: React.DragEvent<HTMLDivElement>,
     componentName: string
   ) => void,
-  handleLowercasing: () => void,
   typeOfNode: any
 ): ToolboxItemType[] => [
   {
@@ -28,7 +27,6 @@ export const createNormalizationToolboxItems = (
       onDragStart(event, typeOfNode.LowercasingNode.nodeComponentName),
     icon: typeOfNode.LowercasingNode.icon,
     borderColor: typeOfNode.LowercasingNode.borderColor,
-    onClick: handleLowercasing,
   },
   {
     id: typeOfNode.TokenizationNode.name,
@@ -39,5 +37,24 @@ export const createNormalizationToolboxItems = (
       onDragStart(event, typeOfNode.TokenizationNode.nodeComponentName),
     icon: typeOfNode.TokenizationNode.icon,
     borderColor: typeOfNode.TokenizationNode.borderColor,
+  },
+];
+
+export const createRemovalToolboxItems = (
+  onDragStart: (
+    event: React.DragEvent<HTMLDivElement>,
+    componentName: string
+  ) => void,
+  typeOfNode: any
+): ToolboxItemType[] => [
+  {
+    id: typeOfNode.PunctuationNode.name,
+    name: typeOfNode.PunctuationNode.name,
+    category: typeOfNode.PunctuationNode.category,
+    tip: typeOfNode.PunctuationNode.tip,
+    onDragStart: (event: React.DragEvent<HTMLDivElement>) =>
+      onDragStart(event, typeOfNode.PunctuationNode.nodeComponentName),
+    icon: typeOfNode.PunctuationNode.icon,
+    borderColor: typeOfNode.PunctuationNode.borderColor,
   },
 ];

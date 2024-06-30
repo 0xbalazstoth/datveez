@@ -27,6 +27,7 @@ import ToolboxGroup from "../components/toolbox.group";
 import { InformationCircleIcon } from "@heroicons/react/24/outline";
 import {
   createNormalizationToolboxItems,
+  createRemovalToolboxItems,
   ToolboxItemType,
 } from "../types/toolbox.items.type";
 import { ToolboxCategory } from "../types/toolbox.categories.type";
@@ -89,13 +90,13 @@ const StepsPageContent = (props: StepsPageProps) => {
     }
   };
 
-  const handleNormalization = () => {
-    console.log("Normalization");
-  };
-
   const normalizationToolboxItems = createNormalizationToolboxItems(
     onDragStart,
-    handleNormalization,
+    typeOfNode
+  );
+
+  const removalToolboxItems = createRemovalToolboxItems(
+    onDragStart,
     typeOfNode
   );
 
@@ -141,7 +142,7 @@ const StepsPageContent = (props: StepsPageProps) => {
                     onDragStart={item.onDragStart}
                     icon={item.icon}
                     borderColor={item.borderColor}
-                    onClick={item.onClick}
+                    onClick={item.onDoubleClick}
                   />
                 )
               )}
@@ -151,20 +152,21 @@ const StepsPageContent = (props: StepsPageProps) => {
               borderColor={nodeCategoryColors.Remove}
               title="Removal"
             >
-              <ToolboxItem
-                id={typeOfNode.PunctuationNode.name}
-                name={typeOfNode.PunctuationNode.name}
-                category={typeOfNode.PunctuationNode.category}
-                tip={typeOfNode.PunctuationNode.tip}
-                onDragStart={(event) =>
-                  onDragStart(
-                    event,
-                    typeOfNode.PunctuationNode.nodeComponentName
-                  )
-                }
-                icon={typeOfNode.PunctuationNode.icon}
-                borderColor={typeOfNode.PunctuationNode.borderColor}
-              ></ToolboxItem>
+              {removalToolboxItems.map(
+                (item: ToolboxItemType, index: React.Key) => (
+                  <ToolboxItem
+                    key={index}
+                    id={item.id}
+                    name={item.name}
+                    category={item.category}
+                    tip={item.tip}
+                    onDragStart={item.onDragStart}
+                    icon={item.icon}
+                    borderColor={item.borderColor}
+                    onClick={item.onDoubleClick}
+                  />
+                )
+              )}
             </ToolboxGroup>
           </div>
         </Sidebar>

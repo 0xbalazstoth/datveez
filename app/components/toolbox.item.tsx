@@ -25,13 +25,13 @@ export default function ToolboxItem(props: ToolboxItemProps) {
     children,
     disabled = false,
     icon,
-    onClick,
+    onClick: onDoubleClick,
     borderColor,
   } = props;
 
   const handleKeyDown = (event: React.KeyboardEvent<HTMLDivElement>) => {
-    if (event.key === "o" && onClick) {
-      onClick();
+    if (event.key === "o" && onDoubleClick) {
+      onDoubleClick();
     }
   };
 
@@ -45,7 +45,7 @@ export default function ToolboxItem(props: ToolboxItemProps) {
       onDragStart={(event) =>
         !disabled && onDragStart && onDragStart(event, id)
       }
-      onDoubleClick={onClick}
+      onDoubleClick={onDoubleClick}
       onKeyDown={handleKeyDown}
       tabIndex={0} // Make div focusable to receive key events
       style={{ transform: "translate(0px, 0px)", opacity: disabled ? 0.5 : 1 }}
