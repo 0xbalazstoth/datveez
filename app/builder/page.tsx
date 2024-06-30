@@ -14,6 +14,7 @@ import { StepsProvider, useSteps } from "../contexts/steps.context";
 import { StepName } from "../types/step.type";
 import { nodeCategoryColors, typeOfNode } from "../types/node.type";
 import ToolboxGroup from "../components/toolbox.group";
+import { InformationCircleIcon } from "@heroicons/react/24/outline";
 
 interface StepsPageProps {}
 
@@ -96,7 +97,8 @@ const StepsPageContent = (props: StepsPageProps) => {
             </div>
 
             {uploadedFile ? (
-              <div className="ml-auto badge badge-neutral p-4 text-white font-bold">
+              <div className="ml-auto badge badge-neutral p-4 text-white font-bold flex gap-2">
+                <InformationCircleIcon className="h-6 w-6" />
                 Navigate with arrow keys!
               </div>
             ) : null}

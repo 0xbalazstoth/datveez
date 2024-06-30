@@ -39,6 +39,7 @@ import { typeOfNode } from "../types/node.type";
 import lowercasingNode from "./lowercasing.node";
 import tokenizationNode from "./tokenization.node";
 import punctuationNode from "./punctuation.node";
+import { useSteps } from "../contexts/steps.context";
 
 const nodeTypes = {
   selectorNode: InitialNode,
@@ -338,6 +339,8 @@ function LayoutFlow({
     [screenToFlowPosition, setNodes, saveFlow]
   );
 
+  const { isEditingMode } = useSteps();
+
   return (
     <>
       <div className="flex justify-between gap-3">
@@ -387,6 +390,10 @@ function LayoutFlow({
         onDrop={onDrop}
         onDragOver={onDragOver}
         onInit={setRfInstance}
+        panOnDrag={!isEditingMode}
+        nodesConnectable={!isEditingMode}
+        nodesDraggable={!isEditingMode}
+        nodesFocusable={!isEditingMode}
       >
         <MiniMap zoomable pannable nodeClassName={nodeClassName}></MiniMap>
         <Controls></Controls>
