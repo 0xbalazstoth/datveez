@@ -13,6 +13,7 @@ import StepIndicator from "../steps/step.indicator";
 import { StepsProvider, useSteps } from "../contexts/steps.context";
 import { StepName } from "../types/step.type";
 import typeOfNode from "../types/node.type";
+import ToolboxGroup from "../components/toolbox.group";
 
 interface StepsPageProps {}
 
@@ -104,36 +105,38 @@ const StepsPageContent = (props: StepsPageProps) => {
         </div>
         <Sidebar>
           <div className="flex flex-col gap-2 mt-10">
-            <ToolboxItem
-              id={typeOfNode.LowercasingNode.name}
-              name={typeOfNode.LowercasingNode.name}
-              category={typeOfNode.LowercasingNode.category}
-              tip={typeOfNode.LowercasingNode.tip}
-              onDragStart={(event) =>
-                onDragStart(
-                  event,
-                  typeOfNode.LowercasingNode.nodeComponentName,
-                  typeOfNode.LowercasingNode.name
-                )
-              }
-              // disabled={disabledItems.includes(typeOfNode.LowercasingNode.name)}
-            ></ToolboxItem>
-            <ToolboxItem
-              id={typeOfNode.TokenizationNode.name}
-              name={typeOfNode.TokenizationNode.name}
-              category={typeOfNode.TokenizationNode.category}
-              tip={typeOfNode.TokenizationNode.tip}
-              onDragStart={(event) =>
-                onDragStart(
-                  event,
-                  typeOfNode.TokenizationNode.nodeComponentName,
-                  typeOfNode.TokenizationNode.name
-                )
-              }
-              // disabled={disabledItems.includes(
-              //   typeOfNode.TokenizationNode.name
-              // )}
-            ></ToolboxItem>
+            <ToolboxGroup title="Normalization">
+              <ToolboxItem
+                id={typeOfNode.LowercasingNode.name}
+                name={typeOfNode.LowercasingNode.name}
+                category={typeOfNode.LowercasingNode.category}
+                tip={typeOfNode.LowercasingNode.tip}
+                onDragStart={(event) =>
+                  onDragStart(
+                    event,
+                    typeOfNode.LowercasingNode.nodeComponentName,
+                    typeOfNode.LowercasingNode.name
+                  )
+                }
+                // disabled={disabledItems.includes(typeOfNode.LowercasingNode.name)}
+              ></ToolboxItem>
+              <ToolboxItem
+                id={typeOfNode.TokenizationNode.name}
+                name={typeOfNode.TokenizationNode.name}
+                category={typeOfNode.TokenizationNode.category}
+                tip={typeOfNode.TokenizationNode.tip}
+                onDragStart={(event) =>
+                  onDragStart(
+                    event,
+                    typeOfNode.TokenizationNode.nodeComponentName,
+                    typeOfNode.TokenizationNode.name
+                  )
+                }
+                // disabled={disabledItems.includes(
+                //   typeOfNode.TokenizationNode.name
+                // )}
+              ></ToolboxItem>
+            </ToolboxGroup>
           </div>
         </Sidebar>
       </div>
