@@ -1,13 +1,16 @@
 interface ToolboxGroupProps {
   title: string;
   children: React.ReactNode;
+  borderColor: string;
 }
 
 export default function ToolboxGroup(props: ToolboxGroupProps) {
-  const { title, children } = props;
+  const { title, children, borderColor } = props;
 
   return (
-    <div className="collapse collapse-plus bg-gray-800">
+    <div
+      className={`border-l-4 ${borderColor} collapse collapse-plus bg-gray-800`}
+    >
       <input type="checkbox" />
       <div className="collapse-title text-xl font-medium text-white">
         {title}

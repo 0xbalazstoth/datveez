@@ -17,7 +17,7 @@ export default function FileData(props: FileDataProps) {
   const { fileData, fileStats } = props;
 
   return (
-    <div className="flex flex-col gap-2 mb-[75px]">
+    <div className="flex flex-col gap-2">
       <h1 className="text-2xl font-bold text-black">Dataset Preview</h1>
       <span className="text-black">
         Showing the first 10 rows of the dataset.

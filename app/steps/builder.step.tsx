@@ -1,4 +1,3 @@
-// steps/builder.step.tsx
 import { useRef } from "react";
 import Modal from "../components/modal";
 import Flow from "../flow editor/flow";

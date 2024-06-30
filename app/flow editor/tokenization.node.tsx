@@ -1,30 +1,31 @@
 import React, { memo } from "react";
 import { Handle, Position } from "reactflow";
 import ToolboxItem from "../components/toolbox.item";
-import { ToolboxCategory } from "../types/toolbox.categories.type";
-import typeOfNode from "../types/node.type";
+import { typeOfNode } from "../types/node.type";
 
-function LowercasingNode() {
+function TokenizationNode() {
   return (
     <ToolboxItem
       id={Math.random().toString()}
-      name={typeOfNode.LowercasingNode.name}
-      category={typeOfNode.LowercasingNode.category}
+      name={typeOfNode.TokenizationNode.name}
+      category={typeOfNode.TokenizationNode.category}
+      icon={typeOfNode.TokenizationNode.icon}
+      borderColor={typeOfNode.TokenizationNode.borderColor}
     >
       <Handle
         type="target"
         position={Position.Top}
         className="w-16 !bg-accent"
-        id={typeOfNode.LowercasingNode.nodeHandlerId}
+        id={typeOfNode.TokenizationNode.nodeHandlerId}
       />
       <Handle
         type="source"
         position={Position.Bottom}
         className="w-16 !bg-red-300"
-        id={typeOfNode.LowercasingNode.nodeHandlerId}
+        id={typeOfNode.TokenizationNode.nodeHandlerId}
       />
     </ToolboxItem>
   );
 }
 
-export default memo(LowercasingNode);
+export default memo(TokenizationNode);

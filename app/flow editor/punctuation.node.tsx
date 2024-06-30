@@ -1,30 +1,31 @@
 import React, { memo } from "react";
 import { Handle, Position } from "reactflow";
 import ToolboxItem from "../components/toolbox.item";
-import { ToolboxCategory } from "../types/toolbox.categories.type";
-import typeOfNode from "../types/node.type";
+import { typeOfNode } from "../types/node.type";
 
-function TokenizationNode() {
+function PunctuationNode() {
   return (
     <ToolboxItem
       id={Math.random().toString()}
-      name={typeOfNode.TokenizationNode.name}
-      category={typeOfNode.TokenizationNode.category}
+      name={typeOfNode.PunctuationNode.name}
+      category={typeOfNode.PunctuationNode.category}
+      icon={typeOfNode.PunctuationNode.icon}
+      borderColor={typeOfNode.PunctuationNode.borderColor}
     >
       <Handle
         type="target"
         position={Position.Top}
         className="w-16 !bg-accent"
-        id={typeOfNode.TokenizationNode.nodeHandlerId}
+        id={typeOfNode.PunctuationNode.nodeHandlerId}
       />
       <Handle
         type="source"
         position={Position.Bottom}
         className="w-16 !bg-red-300"
-        id={typeOfNode.TokenizationNode.nodeHandlerId}
+        id={typeOfNode.PunctuationNode.nodeHandlerId}
       />
     </ToolboxItem>
   );
 }
 
-export default memo(TokenizationNode);
+export default memo(PunctuationNode);

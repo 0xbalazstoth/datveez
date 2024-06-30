@@ -35,14 +35,16 @@ import {
 } from "@heroicons/react/24/outline";
 
 import "reactflow/dist/style.css";
-import typeOfNode from "../types/node.type";
-import lowercasingNode from "./toolbox.lowercasing.node";
-import tokenizationNode from "./toolbox.tokenization.node";
+import { typeOfNode } from "../types/node.type";
+import lowercasingNode from "./lowercasing.node";
+import tokenizationNode from "./tokenization.node";
+import punctuationNode from "./punctuation.node";
 
 const nodeTypes = {
   selectorNode: InitialNode,
   lowercasingNode: lowercasingNode,
   tokenizationNode: tokenizationNode,
+  punctuationNode: punctuationNode,
 };
 
 const edgeTypes: EdgeTypes = {

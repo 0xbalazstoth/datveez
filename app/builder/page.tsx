@@ -12,7 +12,7 @@ import NormalizeStep from "../steps/normalize.step";
 import StepIndicator from "../steps/step.indicator";
 import { StepsProvider, useSteps } from "../contexts/steps.context";
 import { StepName } from "../types/step.type";
-import typeOfNode from "../types/node.type";
+import { nodeCategoryColors, typeOfNode } from "../types/node.type";
 import ToolboxGroup from "../components/toolbox.group";
 
 interface StepsPageProps {}
@@ -79,6 +79,10 @@ const StepsPageContent = (props: StepsPageProps) => {
     }
   };
 
+  const handleLowercasing = () => {
+    console.log("Lowercasing");
+  };
+
   return (
     <StepsLayout>
       <div className="drawer lg:drawer-open">
@@ -105,7 +109,10 @@ const StepsPageContent = (props: StepsPageProps) => {
         </div>
         <Sidebar>
           <div className="flex flex-col gap-2 mt-10">
-            <ToolboxGroup title="Normalization">
+            <ToolboxGroup
+              borderColor={nodeCategoryColors.Normalization}
+              title="Normalization"
+            >
               <ToolboxItem
                 id={typeOfNode.LowercasingNode.name}
                 name={typeOfNode.LowercasingNode.name}
@@ -118,7 +125,9 @@ const StepsPageContent = (props: StepsPageProps) => {
                     typeOfNode.LowercasingNode.name
                   )
                 }
-                // disabled={disabledItems.includes(typeOfNode.LowercasingNode.name)}
+                icon={typeOfNode.LowercasingNode.icon}
+                borderColor={typeOfNode.LowercasingNode.borderColor}
+                onClick={handleLowercasing}
               ></ToolboxItem>
               <ToolboxItem
                 id={typeOfNode.TokenizationNode.name}
@@ -132,9 +141,29 @@ const StepsPageContent = (props: StepsPageProps) => {
                     typeOfNode.TokenizationNode.name
                   )
                 }
-                // disabled={disabledItems.includes(
-                //   typeOfNode.TokenizationNode.name
-                // )}
+                icon={typeOfNode.TokenizationNode.icon}
+                borderColor={typeOfNode.TokenizationNode.borderColor}
+              ></ToolboxItem>
+            </ToolboxGroup>
+
+            <ToolboxGroup
+              borderColor={nodeCategoryColors.Remove}
+              title="Removal"
+            >
+              <ToolboxItem
+                id={typeOfNode.PunctuationNode.name}
+                name={typeOfNode.PunctuationNode.name}
+                category={typeOfNode.PunctuationNode.category}
+                tip={typeOfNode.PunctuationNode.tip}
+                onDragStart={(event) =>
+                  onDragStart(
+                    event,
+                    typeOfNode.PunctuationNode.nodeComponentName,
+                    typeOfNode.PunctuationNode.name
+                  )
+                }
+                icon={typeOfNode.PunctuationNode.icon}
+                borderColor={typeOfNode.PunctuationNode.borderColor}
               ></ToolboxItem>
             </ToolboxGroup>
           </div>

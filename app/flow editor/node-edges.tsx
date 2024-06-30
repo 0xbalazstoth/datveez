@@ -1,6 +1,6 @@
 import { MarkerType } from "reactflow";
 import "./node-edges.style.css";
-import typeOfNode from "../types/node.type";
+import { typeOfNode } from "../types/node.type";
 
 const position = { x: 0, y: 0 };
 
