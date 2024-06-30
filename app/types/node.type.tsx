@@ -2,6 +2,17 @@ import { ToolboxCategory } from "./toolbox.categories.type";
 import { MdOutlineGeneratingTokens } from "react-icons/md";
 import { VscCaseSensitive } from "react-icons/vsc";
 import React from "react";
+import lowercasingNode from "../flow editor/lowercasing.node";
+import punctuationNode from "../flow editor/punctuation.node";
+import tokenizationNode from "../flow editor/tokenization.node";
+import InitialNode from "../flow editor/node";
+
+const nodeComponentTypes = {
+  selectorNode: InitialNode,
+  lowercasingNode: lowercasingNode,
+  tokenizationNode: tokenizationNode,
+  punctuationNode: punctuationNode,
+};
 
 const nodeCategoryColors = {
   Normalization: "border-accent",
@@ -39,4 +50,4 @@ const typeOfNode = {
   },
 };
 
-export { typeOfNode, nodeCategoryColors };
+export { typeOfNode, nodeCategoryColors, nodeComponentTypes };

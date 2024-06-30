@@ -8,11 +8,7 @@ import { useSteps } from "../contexts/steps.context";
 
 function LowercasingNode() {
   const modalRef = useRef<HTMLDialogElement>(null);
-  const { fileData, setIsEditingMode } = useSteps();
-
-  useEffect(() => {
-    console.log(fileData![0]);
-  }, [fileData]);
+  const { setIsEditingMode } = useSteps();
 
   const handleModalOpen = () => {
     modalRef.current?.showModal();
@@ -24,8 +20,17 @@ function LowercasingNode() {
     setIsEditingMode(false);
   };
 
-  const [oldText, setOldText] = useState<string>("ExamPLE");
+  const defaultText = "ExAmPLE";
+  const normalizedText = defaultText.toLowerCase();
+
+  const [oldText, setOldText] = useState<string>(defaultText);
   const [newText, setNewText] = useState<string>(oldText.toLowerCase());
+
+  const handleInputChange = (event: React.ChangeEvent<HTMLInputElement>) => {
+    const value = event.target.value;
+    setOldText(value);
+    setNewText(value.toLowerCase());
+  };
 
   return (
     <>
@@ -57,14 +62,34 @@ function LowercasingNode() {
         ref={modalRef}
       >
         <div className="flex flex-col gap-2 mt-5">
-          <h1 className="text-gray-300">Example:</h1>
+          <label className="input input-bordered flex items-center gap-2 text-gray-300">
+            Input
+            <input
+              type="text"
+              className="grow"
+              placeholder={defaultText}
+              value={oldText}
+              onChange={handleInputChange}
+              style={{ color: "white" }}
+              // maxLength={10}
+            />
+          </label>
 
-          <ReactDiffViewer
-            oldValue={oldText}
-            newValue={newText}
-            splitView={true}
-            useDarkTheme={true}
-          />
+          {oldText === "" ? (
+            <ReactDiffViewer
+              oldValue={defaultText}
+              newValue={normalizedText}
+              splitView={true}
+              useDarkTheme={true}
+            />
+          ) : (
+            <ReactDiffViewer
+              oldValue={oldText}
+              newValue={newText}
+              splitView={true}
+              useDarkTheme={true}
+            />
+          )}
         </div>
       </Modal>
     </>

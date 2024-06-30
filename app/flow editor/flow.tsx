@@ -35,18 +35,18 @@ import {
 } from "@heroicons/react/24/outline";
 
 import "reactflow/dist/style.css";
-import { typeOfNode } from "../types/node.type";
+import { nodeComponentTypes, typeOfNode } from "../types/node.type";
 import lowercasingNode from "./lowercasing.node";
 import tokenizationNode from "./tokenization.node";
 import punctuationNode from "./punctuation.node";
 import { useSteps } from "../contexts/steps.context";
 
-const nodeTypes = {
-  selectorNode: InitialNode,
-  lowercasingNode: lowercasingNode,
-  tokenizationNode: tokenizationNode,
-  punctuationNode: punctuationNode,
-};
+// const nodeTypes = {
+//   selectorNode: InitialNode,
+//   lowercasingNode: lowercasingNode,
+//   tokenizationNode: tokenizationNode,
+//   punctuationNode: punctuationNode,
+// };
 
 const edgeTypes: EdgeTypes = {
   selectorEdge: CustomEdge as ComponentType<EdgeProps>,
@@ -364,7 +364,7 @@ function LayoutFlow({
           </button>
         </div>
         <div className="flex flex-row gap-3">
-          <button className="btn" onClick={clearAllExceptDataset}>
+          <button className="btn btn-error" onClick={clearAllExceptDataset}>
             <XMarkIcon className="h-5 w-5" />
             Clear
           </button>
@@ -383,7 +383,7 @@ function LayoutFlow({
         onEdgesDelete={onEdgesDelete}
         onEdgeClick={onEdgeClick}
         fitView
-        nodeTypes={nodeTypes}
+        nodeTypes={nodeComponentTypes}
         edgeTypes={edgeTypes}
         defaultEdgeOptions={defaultEdgeOptions}
         attributionPosition="top-right"
