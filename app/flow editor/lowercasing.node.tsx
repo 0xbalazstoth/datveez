@@ -8,15 +8,11 @@ import { useSteps } from "../contexts/steps.context";
 
 function LowercasingNode() {
   const modalRef = useRef<HTMLDialogElement>(null);
-  const { fileData, setIsEditingMode, isEditingMode } = useSteps();
+  const { fileData, setIsEditingMode } = useSteps();
 
   useEffect(() => {
     console.log(fileData![0]);
   }, [fileData]);
-
-  useEffect(() => {
-    console.log(isEditingMode);
-  }, [isEditingMode]);
 
   const handleModalOpen = () => {
     modalRef.current?.showModal();

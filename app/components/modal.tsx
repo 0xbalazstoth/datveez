@@ -19,7 +19,7 @@ const Modal = forwardRef<HTMLDialogElement, ModalProps>((props, ref) => {
   return (
     <dialog
       id={id}
-      className={`modal modal-bottom modal-backdrop sm:modal-middle ${className}`}
+      className={`modal modal-bottom modal-backdrop sm:modal-middle ${className} cursor-default`}
       ref={ref}
     >
       <div className="modal-box">
