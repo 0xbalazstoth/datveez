@@ -1,6 +1,16 @@
 "use client";
 
-import { useEffect, useState } from "react";
+import {
+  AwaitedReactNode,
+  DragEvent,
+  JSXElementConstructor,
+  Key,
+  ReactElement,
+  ReactNode,
+  ReactPortal,
+  useEffect,
+  useState,
+} from "react";
 import ToolboxItem from "../components/toolbox.item";
 import StepsLayout from "../layouts/steps.layout";
 import Sidebar from "../components/sidebar";
@@ -15,23 +25,25 @@ import { StepName } from "../types/step.type";
 import { nodeCategoryColors, typeOfNode } from "../types/node.type";
 import ToolboxGroup from "../components/toolbox.group";
 import { InformationCircleIcon } from "@heroicons/react/24/outline";
+import {
+  createNormalizationToolboxItems,
+  ToolboxItemType,
+} from "../types/toolbox.items.type";
+import { ToolboxCategory } from "../types/toolbox.categories.type";
 
 interface StepsPageProps {}
 
 const StepsPageContent = (props: StepsPageProps) => {
   const {} = props;
 
-  const { steps, currentStepIndex, uploadedFile, draftConnections } =
-    useSteps();
+  const { steps, currentStepIndex, uploadedFile } = useSteps();
 
   const [isScreenSmall, setIsScreenSmall] = useState(false);
   const [isClient, setIsClient] = useState(false);
-  const [disabledItems, setDisabledItems] = useState<string[]>([]);
 
   const onDragStart = (
     event: React.DragEvent<HTMLDivElement>,
-    nodeType: string,
-    id: string
+    nodeType: string
   ) => {
     const target = `target-${nodeType}`;
     const source = `source-${nodeType}`;
@@ -39,9 +51,6 @@ const StepsPageContent = (props: StepsPageProps) => {
     event.dataTransfer.setData("target", target);
     event.dataTransfer.setData("source", source);
     event.dataTransfer.effectAllowed = "move";
-
-    // Disable the item after drag
-    setDisabledItems((prev) => [...prev, id]);
   };
 
   useEffect(() => {
@@ -80,9 +89,15 @@ const StepsPageContent = (props: StepsPageProps) => {
     }
   };
 
-  const handleLowercasing = () => {
-    console.log("Lowercasing");
+  const handleNormalization = () => {
+    console.log("Normalization");
   };
+
+  const normalizationToolboxItems = createNormalizationToolboxItems(
+    onDragStart,
+    handleNormalization,
+    typeOfNode
+  );
 
   return (
     <StepsLayout>
@@ -115,37 +130,21 @@ const StepsPageContent = (props: StepsPageProps) => {
               borderColor={nodeCategoryColors.Normalization}
               title="Normalization"
             >
-              <ToolboxItem
-                id={typeOfNode.LowercasingNode.name}
-                name={typeOfNode.LowercasingNode.name}
-                category={typeOfNode.LowercasingNode.category}
-                tip={typeOfNode.LowercasingNode.tip}
-                onDragStart={(event) =>
-                  onDragStart(
-                    event,
-                    typeOfNode.LowercasingNode.nodeComponentName,
-                    typeOfNode.LowercasingNode.name
-                  )
-                }
-                icon={typeOfNode.LowercasingNode.icon}
-                borderColor={typeOfNode.LowercasingNode.borderColor}
-                onClick={handleLowercasing}
-              ></ToolboxItem>
-              <ToolboxItem
-                id={typeOfNode.TokenizationNode.name}
-                name={typeOfNode.TokenizationNode.name}
-                category={typeOfNode.TokenizationNode.category}
-                tip={typeOfNode.TokenizationNode.tip}
-                onDragStart={(event) =>
-                  onDragStart(
-                    event,
-                    typeOfNode.TokenizationNode.nodeComponentName,
-                    typeOfNode.TokenizationNode.name
-                  )
-                }
-                icon={typeOfNode.TokenizationNode.icon}
-                borderColor={typeOfNode.TokenizationNode.borderColor}
-              ></ToolboxItem>
+              {normalizationToolboxItems.map(
+                (item: ToolboxItemType, index: React.Key) => (
+                  <ToolboxItem
+                    key={index}
+                    id={item.id}
+                    name={item.name}
+                    category={item.category}
+                    tip={item.tip}
+                    onDragStart={item.onDragStart}
+                    icon={item.icon}
+                    borderColor={item.borderColor}
+                    onClick={item.onClick}
+                  />
+                )
+              )}
             </ToolboxGroup>
 
             <ToolboxGroup
@@ -160,8 +159,7 @@ const StepsPageContent = (props: StepsPageProps) => {
                 onDragStart={(event) =>
                   onDragStart(
                     event,
-                    typeOfNode.PunctuationNode.nodeComponentName,
-                    typeOfNode.PunctuationNode.name
+                    typeOfNode.PunctuationNode.nodeComponentName
                   )
                 }
                 icon={typeOfNode.PunctuationNode.icon}

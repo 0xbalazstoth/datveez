@@ -24,10 +24,8 @@ function LowercasingNode() {
     setIsEditingMode(false);
   };
 
-  const [oldText, setOldText] = useState<string>("This is the old text.");
-  const [newText, setNewText] = useState<string>(
-    "This is the new text with some changes."
-  );
+  const [oldText, setOldText] = useState<string>("ExamPLE");
+  const [newText, setNewText] = useState<string>(oldText.toLowerCase());
 
   return (
     <>
@@ -65,6 +63,7 @@ function LowercasingNode() {
             oldValue={oldText}
             newValue={newText}
             splitView={true}
+            useDarkTheme={true}
           />
         </div>
       </Modal>

@@ -22,8 +22,6 @@ interface StepsContextProps {
   setFileStats: React.Dispatch<React.SetStateAction<FileStat | null>>;
   fileData: any[] | null;
   setFileData: React.Dispatch<React.SetStateAction<any[] | null>>;
-  setDraftConnections: React.Dispatch<React.SetStateAction<any[]>>;
-  draftConnections: any;
   isEditingMode: boolean;
   setIsEditingMode: React.Dispatch<React.SetStateAction<boolean>>;
 }
@@ -113,8 +111,6 @@ export const StepsProvider = ({ children }: { children: ReactNode }) => {
         setFileStats,
         fileData,
         setFileData,
-        setDraftConnections,
-        draftConnections,
         isEditingMode,
         setIsEditingMode,
       }}

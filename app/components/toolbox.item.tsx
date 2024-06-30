@@ -3,7 +3,7 @@ import { ToolboxCategory } from "../types/toolbox.categories.type";
 
 interface ToolboxItemProps {
   name: string;
-  category: ToolboxCategory;
+  category?: ToolboxCategory;
   isDropped?: boolean;
   tip?: string;
   id: string;
