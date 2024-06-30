@@ -394,6 +394,9 @@ function LayoutFlow({
         nodesConnectable={!isEditingMode}
         nodesDraggable={!isEditingMode}
         nodesFocusable={!isEditingMode}
+        zoomOnPinch={!isEditingMode}
+        zoomOnDoubleClick={!isEditingMode}
+        zoomOnScroll={!isEditingMode}
       >
         <MiniMap zoomable pannable nodeClassName={nodeClassName}></MiniMap>
         <Controls></Controls>
