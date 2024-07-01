@@ -121,7 +121,7 @@ const StepsPageContent = (props: StepsPageProps) => {
           <div className="flex flex-col gap-2 mt-10">
             <ToolboxGroup
               borderColor={nodeCategoryColors.Normalization}
-              title="Normalization"
+              title={`Normalization (${normalizationToolboxItems.length})`}
             >
               {normalizationToolboxItems.map(
                 (item: ToolboxItemType, index: React.Key) => (
@@ -135,6 +135,7 @@ const StepsPageContent = (props: StepsPageProps) => {
                     icon={item.icon}
                     borderColor={item.borderColor}
                     onClick={item.onDoubleClick}
+                    isRecommended={item.isRecommended}
                   />
                 )
               )}
@@ -142,7 +143,7 @@ const StepsPageContent = (props: StepsPageProps) => {
 
             <ToolboxGroup
               borderColor={nodeCategoryColors.Remove}
-              title="Removal"
+              title={`Removal (${removalToolboxItems.length})`}
             >
               {removalToolboxItems.map(
                 (item: ToolboxItemType, index: React.Key) => (
@@ -156,6 +157,7 @@ const StepsPageContent = (props: StepsPageProps) => {
                     icon={item.icon}
                     borderColor={item.borderColor}
                     onClick={item.onDoubleClick}
+                    isRecommended={item.isRecommended}
                   />
                 )
               )}
@@ -163,7 +165,7 @@ const StepsPageContent = (props: StepsPageProps) => {
 
             <ToolboxGroup
               borderColor={nodeCategoryColors.CustomRegex}
-              title="Custom"
+              title={`Custom (${customToolboxItems.length})`}
             >
               {customToolboxItems.map(
                 (item: ToolboxItemType, index: React.Key) => (
@@ -177,6 +179,7 @@ const StepsPageContent = (props: StepsPageProps) => {
                     icon={item.icon}
                     borderColor={item.borderColor}
                     onClick={item.onDoubleClick}
+                    isRecommended={item.isRecommended}
                   />
                 )
               )}

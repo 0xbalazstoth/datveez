@@ -27,6 +27,7 @@ const typeOfNode = {
     tip: "Lowercase text",
     icon: <VscCaseSensitive className="h-5 w-5" />,
     borderColor: nodeCategoryColors.Normalization,
+    isRecommended: true,
   },
   TokenizationNode: {
     name: "Tokenization",
@@ -54,6 +55,7 @@ const typeOfNode = {
     tip: "Remove numbers",
     icon: React.createElement("span", null, "123"),
     borderColor: nodeCategoryColors.Remove,
+    isRecommended: true,
   },
   CustomRegexNode: {
     name: "Custom",

@@ -9,6 +9,7 @@ export interface ToolboxItemType {
   icon: string;
   borderColor: string;
   onDoubleClick?: () => void;
+  isRecommended?: boolean;
 }
 
 export const createNormalizationToolboxItems = (
@@ -27,6 +28,7 @@ export const createNormalizationToolboxItems = (
       onDragStart(event, typeOfNode.LowercasingNode.nodeComponentName),
     icon: typeOfNode.LowercasingNode.icon,
     borderColor: typeOfNode.LowercasingNode.borderColor,
+    isRecommended: typeOfNode.LowercasingNode.isRecommended,
   },
 ];
 
@@ -46,6 +48,7 @@ export const createRemovalToolboxItems = (
       onDragStart(event, typeOfNode.PunctuationNode.nodeComponentName),
     icon: typeOfNode.PunctuationNode.icon,
     borderColor: typeOfNode.PunctuationNode.borderColor,
+    isRecommended: typeOfNode.PunctuationNode.isRecommended,
   },
   {
     id: typeOfNode.NumbersNode.name,
@@ -56,6 +59,7 @@ export const createRemovalToolboxItems = (
       onDragStart(event, typeOfNode.NumbersNode.nodeComponentName),
     icon: typeOfNode.NumbersNode.icon,
     borderColor: typeOfNode.NumbersNode.borderColor,
+    isRecommended: typeOfNode.NumbersNode.isRecommended,
   },
 ];
 
@@ -75,5 +79,6 @@ export const createCustomToolboxItems = (
       onDragStart(event, typeOfNode.CustomRegexNode.nodeComponentName),
     icon: typeOfNode.CustomRegexNode.icon,
     borderColor: typeOfNode.CustomRegexNode.borderColor,
+    isRecommended: typeOfNode.CustomRegexNode.isRecommended,
   },
 ];
