@@ -36,17 +36,7 @@ import {
 
 import "reactflow/dist/style.css";
 import { nodeComponentTypes, typeOfNode } from "../types/node.type";
-import lowercasingNode from "./lowercasing.node";
-import tokenizationNode from "./tokenization.node";
-import punctuationNode from "./punctuation.node";
 import { useSteps } from "../contexts/steps.context";
-
-// const nodeTypes = {
-//   selectorNode: InitialNode,
-//   lowercasingNode: lowercasingNode,
-//   tokenizationNode: tokenizationNode,
-//   punctuationNode: punctuationNode,
-// };
 
 const edgeTypes: EdgeTypes = {
   selectorEdge: CustomEdge as ComponentType<EdgeProps>,

@@ -1,12 +1,13 @@
-import React, { memo, useRef, useState } from "react";
+import React, { memo, useState, useRef, useEffect } from "react";
 import { Handle, Position } from "reactflow";
-import ToolboxItem from "../components/toolbox.item";
-import { typeOfNode } from "../types/node.type";
-import { useSteps } from "../contexts/steps.context";
-import Modal from "../components/modal";
+import ToolboxItem from "../../components/toolbox.item";
+import { typeOfNode } from "../../types/node.type";
+import Modal from "../../components/modal";
 import ReactDiffViewer from "react-diff-viewer-continued";
+import { useSteps } from "../../contexts/steps.context";
+import { lowercasing } from "@/app/utils/utils";
 
-function PunctuationNode() {
+function LowercasingNode() {
   const modalRef = useRef<HTMLDialogElement>(null);
   const { setIsEditingMode } = useSteps();
 
@@ -20,47 +21,43 @@ function PunctuationNode() {
     setIsEditingMode(false);
   };
 
-  const removePunctuation = (text: string) => {
-    return text.replace(/[.,\/#!$%\^&\*;:{}=\-_`~()?"']/g, "");
-  };
-
-  const defaultText = 'Test.!),"?';
-  const normalizedText = removePunctuation(defaultText);
+  const defaultText = "ExAmPLE";
+  const normalizedText = lowercasing(defaultText);
 
   const [oldText, setOldText] = useState<string>(defaultText);
-  const [newText, setNewText] = useState<string>(removePunctuation(oldText));
+  const [newText, setNewText] = useState<string>(lowercasing(oldText));
 
   const handleInputChange = (event: React.ChangeEvent<HTMLInputElement>) => {
     const value = event.target.value;
     setOldText(value);
-    setNewText(removePunctuation(value));
+    setNewText(lowercasing(value));
   };
 
   return (
     <>
       <ToolboxItem
         id={Math.random().toString()}
-        name={typeOfNode.PunctuationNode.name}
-        category={typeOfNode.PunctuationNode.category}
-        icon={typeOfNode.PunctuationNode.icon}
-        borderColor={typeOfNode.PunctuationNode.borderColor}
+        name={typeOfNode.LowercasingNode.name}
+        category={typeOfNode.LowercasingNode.category}
+        icon={typeOfNode.LowercasingNode.icon}
+        borderColor={typeOfNode.LowercasingNode.borderColor}
         onClick={handleModalOpen}
       >
         <Handle
           type="target"
           position={Position.Top}
           className="w-16 !bg-accent"
-          id={typeOfNode.PunctuationNode.nodeHandlerId}
+          id={typeOfNode.LowercasingNode.nodeHandlerId}
         />
         <Handle
           type="source"
           position={Position.Bottom}
           className="w-16 !bg-red-300"
-          id={typeOfNode.PunctuationNode.nodeHandlerId}
+          id={typeOfNode.LowercasingNode.nodeHandlerId}
         />
       </ToolboxItem>
       <Modal
-        title="Remove punctuation"
+        title="Lowercasing"
         onClose={handleModalClose}
         id="lowercasing_modal"
         ref={modalRef}
@@ -100,4 +97,4 @@ function PunctuationNode() {
   );
 }
 
-export default memo(PunctuationNode);
+export default memo(LowercasingNode);

@@ -28,16 +28,6 @@ export const createNormalizationToolboxItems = (
     icon: typeOfNode.LowercasingNode.icon,
     borderColor: typeOfNode.LowercasingNode.borderColor,
   },
-  //   {
-  //     id: typeOfNode.TokenizationNode.name,
-  //     name: typeOfNode.TokenizationNode.name,
-  //     category: typeOfNode.TokenizationNode.category,
-  //     tip: typeOfNode.TokenizationNode.tip,
-  //     onDragStart: (event: React.DragEvent<HTMLDivElement>) =>
-  //       onDragStart(event, typeOfNode.TokenizationNode.nodeComponentName),
-  //     icon: typeOfNode.TokenizationNode.icon,
-  //     borderColor: typeOfNode.TokenizationNode.borderColor,
-  //   },
 ];
 
 export const createRemovalToolboxItems = (
@@ -56,5 +46,34 @@ export const createRemovalToolboxItems = (
       onDragStart(event, typeOfNode.PunctuationNode.nodeComponentName),
     icon: typeOfNode.PunctuationNode.icon,
     borderColor: typeOfNode.PunctuationNode.borderColor,
+  },
+  {
+    id: typeOfNode.NumbersNode.name,
+    name: typeOfNode.NumbersNode.name,
+    category: typeOfNode.NumbersNode.category,
+    tip: typeOfNode.NumbersNode.tip,
+    onDragStart: (event: React.DragEvent<HTMLDivElement>) =>
+      onDragStart(event, typeOfNode.NumbersNode.nodeComponentName),
+    icon: typeOfNode.NumbersNode.icon,
+    borderColor: typeOfNode.NumbersNode.borderColor,
+  },
+];
+
+export const createCustomToolboxItems = (
+  onDragStart: (
+    event: React.DragEvent<HTMLDivElement>,
+    componentName: string
+  ) => void,
+  typeOfNode: any
+): ToolboxItemType[] => [
+  {
+    id: typeOfNode.CustomRegexNode.name,
+    name: typeOfNode.CustomRegexNode.name,
+    category: typeOfNode.CustomRegexNode.category,
+    tip: typeOfNode.CustomRegexNode.tip,
+    onDragStart: (event: React.DragEvent<HTMLDivElement>) =>
+      onDragStart(event, typeOfNode.CustomRegexNode.nodeComponentName),
+    icon: typeOfNode.CustomRegexNode.icon,
+    borderColor: typeOfNode.CustomRegexNode.borderColor,
   },
 ];

@@ -1,7 +1,7 @@
 import React, { memo } from "react";
 import { Handle, Position } from "reactflow";
-import ToolboxItem from "../components/toolbox.item";
-import { typeOfNode } from "../types/node.type";
+import ToolboxItem from "../../components/toolbox.item";
+import { typeOfNode } from "../../types/node.type";
 
 function TokenizationNode() {
   return (

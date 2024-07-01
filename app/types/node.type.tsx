@@ -1,22 +1,20 @@
 import { ToolboxCategory } from "./toolbox.categories.type";
 import { MdOutlineGeneratingTokens } from "react-icons/md";
-import { VscCaseSensitive } from "react-icons/vsc";
+import { VscCaseSensitive, VscRegex } from "react-icons/vsc";
 import React from "react";
-import lowercasingNode from "../flow editor/lowercasing.node";
-import punctuationNode from "../flow editor/punctuation.node";
-import tokenizationNode from "../flow editor/tokenization.node";
-import InitialNode from "../flow editor/node";
 
-const nodeComponentTypes = {
-  selectorNode: InitialNode,
-  lowercasingNode: lowercasingNode,
-  tokenizationNode: tokenizationNode,
-  punctuationNode: punctuationNode,
-};
+import {
+  lowercasingNode,
+  InitialNode,
+  punctuationNode,
+  numbersNode,
+  customRegexNode,
+} from "../flow editor/toolbox nodes/index";
 
 const nodeCategoryColors = {
   Normalization: "border-accent",
   Remove: "border-red-300",
+  CustomRegex: "border-yellow-300",
 };
 
 const typeOfNode = {
@@ -48,6 +46,32 @@ const typeOfNode = {
     icon: React.createElement("span", null, "?.!"),
     borderColor: nodeCategoryColors.Remove,
   },
+  NumbersNode: {
+    name: "Numbers",
+    nodeHandlerId: "NumbersNode",
+    nodeComponentName: "numbersNode",
+    category: ToolboxCategory.Remove,
+    tip: "Remove numbers",
+    icon: React.createElement("span", null, "123"),
+    borderColor: nodeCategoryColors.Remove,
+  },
+  CustomRegexNode: {
+    name: "Custom",
+    nodeHandlerId: "CustomRegexNode",
+    nodeComponentName: "customRegexNode",
+    category: ToolboxCategory.CustomRegex,
+    tip: "Custom regex",
+    icon: <VscRegex className="h-5 w-5" />,
+    borderColor: nodeCategoryColors.CustomRegex,
+  },
+};
+
+const nodeComponentTypes = {
+  selectorNode: InitialNode,
+  lowercasingNode: lowercasingNode,
+  punctuationNode: punctuationNode,
+  numbersNode: numbersNode,
+  customRegexNode: customRegexNode,
 };
 
 export { typeOfNode, nodeCategoryColors, nodeComponentTypes };

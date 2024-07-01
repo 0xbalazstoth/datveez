@@ -21,7 +21,9 @@ export default function FileStats(props: FileStatsProps) {
             <DocumentTextIcon className="h-8 w-8" />
           </div>
           <div className="stat-title">Total Rows</div>
-          <div className="stat-value">{fileStats.rowCount}</div>
+          <div className="stat-value">
+            {Number(fileStats.rowCount).toLocaleString("de-DE")}
+          </div>
         </div>
 
         <div className="stat">

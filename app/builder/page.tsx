@@ -1,16 +1,6 @@
 "use client";
 
-import {
-  AwaitedReactNode,
-  DragEvent,
-  JSXElementConstructor,
-  Key,
-  ReactElement,
-  ReactNode,
-  ReactPortal,
-  useEffect,
-  useState,
-} from "react";
+import { useEffect, useState } from "react";
 import ToolboxItem from "../components/toolbox.item";
 import StepsLayout from "../layouts/steps.layout";
 import Sidebar from "../components/sidebar";
@@ -19,7 +9,7 @@ import SmallScreenMessage from "../components/small.screen.message";
 import BuilderStep from "../steps/builder.step";
 import UploadStep from "../steps/upload.step";
 import NormalizeStep from "../steps/normalize.step";
-import StepIndicator from "../steps/step.indicator";
+import StepIndicator from "../components/step.indicator";
 import { StepsProvider, useSteps } from "../contexts/steps.context";
 import { StepName } from "../types/step.type";
 import { nodeCategoryColors, typeOfNode } from "../types/node.type";
@@ -28,9 +18,9 @@ import { InformationCircleIcon } from "@heroicons/react/24/outline";
 import {
   createNormalizationToolboxItems,
   createRemovalToolboxItems,
+  createCustomToolboxItems,
   ToolboxItemType,
 } from "../types/toolbox.items.type";
-import { ToolboxCategory } from "../types/toolbox.categories.type";
 
 interface StepsPageProps {}
 
@@ -100,6 +90,8 @@ const StepsPageContent = (props: StepsPageProps) => {
     typeOfNode
   );
 
+  const customToolboxItems = createCustomToolboxItems(onDragStart, typeOfNode);
+
   return (
     <StepsLayout>
       <div className="drawer lg:drawer-open">
@@ -153,6 +145,27 @@ const StepsPageContent = (props: StepsPageProps) => {
               title="Removal"
             >
               {removalToolboxItems.map(
+                (item: ToolboxItemType, index: React.Key) => (
+                  <ToolboxItem
+                    key={index}
+                    id={item.id}
+                    name={item.name}
+                    category={item.category}
+                    tip={item.tip}
+                    onDragStart={item.onDragStart}
+                    icon={item.icon}
+                    borderColor={item.borderColor}
+                    onClick={item.onDoubleClick}
+                  />
+                )
+              )}
+            </ToolboxGroup>
+
+            <ToolboxGroup
+              borderColor={nodeCategoryColors.CustomRegex}
+              title="Custom"
+            >
+              {customToolboxItems.map(
                 (item: ToolboxItemType, index: React.Key) => (
                   <ToolboxItem
                     key={index}
