@@ -61,6 +61,17 @@ export const createRemovalToolboxItems = (
     borderColor: typeOfNode.NumbersNode.borderColor,
     isRecommended: typeOfNode.NumbersNode.isRecommended,
   },
+  {
+    id: typeOfNode.SpecialCharactersNode.name,
+    name: typeOfNode.SpecialCharactersNode.name,
+    category: typeOfNode.SpecialCharactersNode.category,
+    tip: typeOfNode.SpecialCharactersNode.tip,
+    onDragStart: (event: React.DragEvent<HTMLDivElement>) =>
+      onDragStart(event, typeOfNode.SpecialCharactersNode.nodeComponentName),
+    icon: typeOfNode.SpecialCharactersNode.icon,
+    borderColor: typeOfNode.SpecialCharactersNode.borderColor,
+    isRecommended: typeOfNode.SpecialCharactersNode.isRecommended,
+  },
 ];
 
 export const createCustomToolboxItems = (

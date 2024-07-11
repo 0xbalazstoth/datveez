@@ -1,3 +1,5 @@
+"use client";
+
 import { initialNodes, initialEdges } from "./node-edges";
 import { TreeLayout, stratify, tree } from "d3-hierarchy";
 import React, {
@@ -21,6 +23,8 @@ import ReactFlow, {
   Controls,
   Background,
   ReactFlowInstance,
+  NodeChange,
+  applyNodeChanges,
 } from "reactflow";
 import { MarkerType } from "reactflow";
 import InitialNode from "./node";
@@ -134,7 +138,7 @@ function LayoutFlow({
   onGetConnections: any;
   connectionType: "one-to-one" | "one-to-many";
 }) {
-  const [nodes, setNodes, onNodesChange] = useNodesState(initialNodes);
+  const [nodes, setNodes] = useNodesState(initialNodes);
   const [edges, setEdges, onEdgesChange] = useEdgesState(initialEdges);
   const { fitView, screenToFlowPosition, setViewport } = useReactFlow();
   const layoutInitialized = useRef(false);
@@ -150,8 +154,14 @@ function LayoutFlow({
     }
   }, [rfInstance]);
 
+  // TODO: if flow is empty, just ignore this
   const onRestore = useCallback(() => {
     const restoreFlow = async () => {
+      const flowFromStorage = localStorage.getItem(flowKey);
+      if (!flowFromStorage) {
+        return;
+      }
+
       const flow = JSON.parse(localStorage.getItem(flowKey) ?? "");
 
       if (flow) {
@@ -255,9 +265,16 @@ function LayoutFlow({
 
   const deleteNode = useCallback(
     (nodeId: string) => {
-      setNodes((nds) => nds.filter((node) => node.id !== nodeId));
+      setNodes((nds) =>
+        nds.filter((node) => node.id !== nodeId && !node.data.isInitial)
+      );
       setEdges((eds) =>
-        eds.filter((edge) => edge.source !== nodeId && edge.target !== nodeId)
+        eds.filter(
+          (edge) =>
+            edge.source !== nodeId &&
+            edge.target !== nodeId &&
+            !edge.data.isInitial
+        )
       );
       saveFlow();
     },
@@ -327,6 +344,25 @@ function LayoutFlow({
       saveFlow();
     },
     [screenToFlowPosition, setNodes, saveFlow]
+  );
+
+  const onNodesChange = useCallback(
+    (changes: NodeChange[]) =>
+      setNodes((nds) => {
+        const parsedChanges = changes.reduce((res, change) => {
+          const validChange =
+            change.type !== "remove" ||
+            (change.type === "remove" &&
+              nds.find((n) => n.id !== change.id)?.data.isInitial);
+          if (validChange) {
+            res.push(change);
+          }
+          return res;
+        }, [] as NodeChange[]);
+
+        return applyNodeChanges(parsedChanges, nds);
+      }),
+    [setNodes]
   );
 
   const { isEditingMode } = useSteps();

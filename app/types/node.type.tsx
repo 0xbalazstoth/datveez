@@ -4,12 +4,13 @@ import { VscCaseSensitive, VscRegex } from "react-icons/vsc";
 import React from "react";
 
 import {
-  lowercasingNode,
+  LowercasingNode,
   InitialNode,
   punctuationNode,
   numbersNode,
-  customRegexNode,
+  CustomRegexNode,
 } from "../flow editor/toolbox nodes/index";
+import SpecialCharactersNode from "../flow editor/toolbox nodes/SpecialCharactersNode";
 
 const nodeCategoryColors = {
   Normalization: "border-accent",
@@ -22,7 +23,7 @@ const typeOfNode = {
   LowercasingNode: {
     name: "Lowercasing",
     nodeHandlerId: "LowercasingNode",
-    nodeComponentName: "lowercasingNode",
+    nodeComponentName: "LowercasingNode",
     category: ToolboxCategory.Normalization,
     tip: "Lowercase text",
     icon: <VscCaseSensitive className="h-5 w-5" />,
@@ -60,20 +61,30 @@ const typeOfNode = {
   CustomRegexNode: {
     name: "Custom",
     nodeHandlerId: "CustomRegexNode",
-    nodeComponentName: "customRegexNode",
+    nodeComponentName: "CustomRegexNode",
     category: ToolboxCategory.CustomRegex,
     tip: "Custom regex",
     icon: <VscRegex className="h-5 w-5" />,
     borderColor: nodeCategoryColors.CustomRegex,
   },
+  SpecialCharactersNode: {
+    name: "Special Characters",
+    nodeHandlerId: "SpecialCharactersNode",
+    nodeComponentName: "SpecialCharactersNode",
+    category: ToolboxCategory.Remove,
+    tip: "Remove special characters",
+    icon: React.createElement("span", null, "!@#"),
+    borderColor: nodeCategoryColors.Remove,
+  },
 };
 
 const nodeComponentTypes = {
   selectorNode: InitialNode,
-  lowercasingNode: lowercasingNode,
+  LowercasingNode: LowercasingNode,
   punctuationNode: punctuationNode,
   numbersNode: numbersNode,
-  customRegexNode: customRegexNode,
+  CustomRegexNode: CustomRegexNode,
+  SpecialCharactersNode: SpecialCharactersNode,
 };
 
 export { typeOfNode, nodeCategoryColors, nodeComponentTypes };
