@@ -149,9 +149,7 @@ function LayoutFlow({
     if (rfInstance) {
       const allNodes = rfInstance.toObject().nodes;
       const isInitialNode = allNodes.some((node: any) => node.data.isInitial);
-      const columnNodes = allNodes.filter(
-        (node: any) => node.type === typeOfNode.ColumnNode
-      );
+      console.log(allNodes);
 
       const isNodeHasConnectionWith = (nodeId: string) =>
         edges.some((edge) => edge.source === nodeId);
@@ -159,8 +157,9 @@ function LayoutFlow({
       let filteredNodes = allNodes;
 
       if (!isInitialNode && isNodeHasConnectionWith(typeOfNode.DatasetNode)) {
+        console.log("Filtering nodes");
         const connectedNodeIds = new Set(
-          edges.reduce((acc: any, edge: any) => {
+          edges.reduce((acc: any, edge: Edge<any>) => {
             acc.push(edge.source, edge.target);
             return acc;
           }, [])
@@ -170,6 +169,25 @@ function LayoutFlow({
           connectedNodeIds.has(node.id)
         );
       }
+
+      console.log(
+        typeOfNode.ColumnNode.nodeHandlerId,
+        isNodeHasConnectionWith(typeOfNode.ColumnNode.nodeHandlerId)
+      );
+      if (
+        isNodeHasConnectionWith(typeOfNode.ColumnNode.nodeHandlerId) === false
+      ) {
+        // Remove those nodes which are not even connected to anything
+        filteredNodes = allNodes.filter((node: any) =>
+          edges.some(
+            (edge: Edge<any>) =>
+              edge.source === node.id || edge.target === node.id
+          )
+        );
+
+        console.log("Filtered Nodes:", filteredNodes);
+      }
+
       const flow = {
         ...rfInstance.toObject(),
         nodes: filteredNodes,
