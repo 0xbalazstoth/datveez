@@ -31,6 +31,7 @@
     "rete-connection-plugin": "^2.0.2",
     "rete-react-plugin": "^2.0.5",
     "rete-render-utils": "^2.0.2",
+    "stopword": "^3.0.1",
     "uuid": "^10.0.0"
   },
   "devDependencies": {
@@ -39,6 +40,7 @@
     "@types/papaparse": "^5.3.14",
     "@types/react": "^18",
     "@types/react-dom": "^18",
+    "@types/stopword": "^2.0.3",
     "@types/uuid": "^10.0.0",
     "daisyui": "^4.12.6",
     "eslint": "^8",

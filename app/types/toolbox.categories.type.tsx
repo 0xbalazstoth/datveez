@@ -3,4 +3,5 @@ export enum ToolboxCategory {
   Tokenization = "tokenization",
   Normalization = "normalization",
   CustomRegex = "customRegex",
+  Column = "column",
 }

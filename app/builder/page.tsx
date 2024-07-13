@@ -20,6 +20,7 @@ import {
   createRemovalToolboxItems,
   createCustomToolboxItems,
   ToolboxItemType,
+  createColumnToolboxItems,
 } from "../types/toolbox.items.type";
 
 interface StepsPageProps {}
@@ -92,6 +93,8 @@ const StepsPageContent = (props: StepsPageProps) => {
 
   const customToolboxItems = createCustomToolboxItems(onDragStart, typeOfNode);
 
+  const columnToolboxItems = createColumnToolboxItems(onDragStart, typeOfNode);
+
   return (
     <StepsLayout>
       <div className="drawer lg:drawer-open">
@@ -119,6 +122,28 @@ const StepsPageContent = (props: StepsPageProps) => {
         </div>
         <Sidebar>
           <div className="flex flex-col gap-2 mt-10">
+            <ToolboxGroup
+              borderColor={nodeCategoryColors.Column}
+              title={`Columns (${columnToolboxItems.length})`}
+            >
+              {columnToolboxItems.map(
+                (item: ToolboxItemType, index: React.Key) => (
+                  <ToolboxItem
+                    key={index}
+                    id={item.id}
+                    name={item.name}
+                    category={item.category}
+                    tip={item.tip}
+                    onDragStart={item.onDragStart}
+                    icon={item.icon}
+                    borderColor={item.borderColor}
+                    onClick={item.onDoubleClick}
+                    isRecommended={item.isRecommended}
+                  />
+                )
+              )}
+            </ToolboxGroup>
+
             <ToolboxGroup
               borderColor={nodeCategoryColors.Normalization}
               title={`Normalization (${normalizationToolboxItems.length})`}

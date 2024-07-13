@@ -5,6 +5,9 @@ import numbersNode from "./numbers.node";
 import InitialNode from "../node";
 import CustomRegexNode from "./CustomRegexNode";
 import SpecialCharactersNode from "./SpecialCharactersNode";
+import URLSNode from "./URLSNode";
+import StopwordsNode from "./StopwordsNode";
+import ColumnNode from "./ColumnNode";
 
 export {
   tokenizationNode,
@@ -13,5 +16,8 @@ export {
   numbersNode,
   CustomRegexNode,
   SpecialCharactersNode,
+  URLSNode,
+  StopwordsNode,
+  ColumnNode,
   InitialNode,
 };

@@ -1,4 +1,3 @@
-import { MarkerType } from "reactflow";
 import "./node-edges.style.css";
 import { typeOfNode } from "../types/node.type";
 

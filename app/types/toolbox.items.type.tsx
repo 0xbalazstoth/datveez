@@ -72,6 +72,28 @@ export const createRemovalToolboxItems = (
     borderColor: typeOfNode.SpecialCharactersNode.borderColor,
     isRecommended: typeOfNode.SpecialCharactersNode.isRecommended,
   },
+  {
+    id: typeOfNode.URLSNode.name,
+    name: typeOfNode.URLSNode.name,
+    category: typeOfNode.URLSNode.category,
+    tip: typeOfNode.URLSNode.tip,
+    onDragStart: (event: React.DragEvent<HTMLDivElement>) =>
+      onDragStart(event, typeOfNode.URLSNode.nodeComponentName),
+    icon: typeOfNode.URLSNode.icon,
+    borderColor: typeOfNode.URLSNode.borderColor,
+    isRecommended: typeOfNode.URLSNode.isRecommended,
+  },
+  {
+    id: typeOfNode.StopwordsNode.name,
+    name: typeOfNode.StopwordsNode.name,
+    category: typeOfNode.StopwordsNode.category,
+    tip: typeOfNode.StopwordsNode.tip,
+    onDragStart: (event: React.DragEvent<HTMLDivElement>) =>
+      onDragStart(event, typeOfNode.StopwordsNode.nodeComponentName),
+    icon: typeOfNode.StopwordsNode.icon,
+    borderColor: typeOfNode.StopwordsNode.borderColor,
+    isRecommended: typeOfNode.StopwordsNode.isRecommended,
+  },
 ];
 
 export const createCustomToolboxItems = (
@@ -91,5 +113,24 @@ export const createCustomToolboxItems = (
     icon: typeOfNode.CustomRegexNode.icon,
     borderColor: typeOfNode.CustomRegexNode.borderColor,
     isRecommended: typeOfNode.CustomRegexNode.isRecommended,
+  },
+];
+
+export const createColumnToolboxItems = (
+  onDragStart: (
+    event: React.DragEvent<HTMLDivElement>,
+    componentName: string
+  ) => void,
+  typeOfNode: any
+): ToolboxItemType[] => [
+  {
+    id: typeOfNode.ColumnNode.name,
+    name: typeOfNode.ColumnNode.name,
+    category: typeOfNode.ColumnNode.category,
+    tip: typeOfNode.ColumnNode.tip,
+    onDragStart: (event: React.DragEvent<HTMLDivElement>) =>
+      onDragStart(event, typeOfNode.ColumnNode.nodeComponentName),
+    icon: typeOfNode.ColumnNode.icon,
+    borderColor: typeOfNode.ColumnNode.borderColor,
   },
 ];

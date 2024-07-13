@@ -2,6 +2,8 @@ import { ToolboxCategory } from "./toolbox.categories.type";
 import { MdOutlineGeneratingTokens } from "react-icons/md";
 import { VscCaseSensitive, VscRegex } from "react-icons/vsc";
 import React from "react";
+import { GiStopSign } from "react-icons/gi";
+import { TbColumns } from "react-icons/tb";
 
 import {
   LowercasingNode,
@@ -9,13 +11,17 @@ import {
   punctuationNode,
   numbersNode,
   CustomRegexNode,
+  StopwordsNode,
 } from "../flow editor/toolbox nodes/index";
 import SpecialCharactersNode from "../flow editor/toolbox nodes/SpecialCharactersNode";
+import URLSNode from "../flow editor/toolbox nodes/URLSNode";
+import ColumnNode from "../flow editor/toolbox nodes/ColumnNode";
 
 const nodeCategoryColors = {
   Normalization: "border-accent",
   Remove: "border-red-300",
   CustomRegex: "border-yellow-300",
+  Column: "border-blue-300",
 };
 
 const typeOfNode = {
@@ -76,6 +82,33 @@ const typeOfNode = {
     icon: React.createElement("span", null, "!@#"),
     borderColor: nodeCategoryColors.Remove,
   },
+  URLSNode: {
+    name: "URLS",
+    nodeHandlerId: "URLSNode",
+    nodeComponentName: "URLSNode",
+    category: ToolboxCategory.Remove,
+    tip: "Remove URLs",
+    icon: React.createElement("span", null, "http(s)"),
+    borderColor: nodeCategoryColors.Remove,
+  },
+  StopwordsNode: {
+    name: "Stopwords",
+    nodeHandlerId: "StopwordsNode",
+    nodeComponentName: "StopwordsNode",
+    category: ToolboxCategory.Remove,
+    tip: "Remove stopwords",
+    icon: <GiStopSign className="h-5 w-5" />,
+    borderColor: nodeCategoryColors.Remove,
+  },
+  ColumnNode: {
+    name: "Column",
+    nodeHandlerId: "ColumnNode",
+    nodeComponentName: "ColumnNode",
+    category: ToolboxCategory.Column,
+    tip: "Column",
+    icon: <TbColumns className="h-5 w-5" />,
+    borderColor: nodeCategoryColors.Column,
+  },
 };
 
 const nodeComponentTypes = {
@@ -84,6 +117,9 @@ const nodeComponentTypes = {
   punctuationNode: punctuationNode,
   numbersNode: numbersNode,
   CustomRegexNode: CustomRegexNode,
+  StopwordsNode: StopwordsNode,
+  URLSNode: URLSNode,
+  ColumnNode: ColumnNode,
   SpecialCharactersNode: SpecialCharactersNode,
 };
 
