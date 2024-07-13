@@ -149,26 +149,52 @@ function LayoutFlow({
 
   const saveFlow = useCallback(() => {
     if (rfInstance) {
-      const flow = rfInstance.toObject();
+      const allNodes = rfInstance.toObject().nodes;
+      const isInitialNode = allNodes.some((node: any) => node.data.isInitial);
+
+      const isInitialNodeHasConnections = (nodeId: string) =>
+        edges.some((edge) => edge.source === nodeId);
+
+      let isSaveNeeded = true;
+      let filteredNodes = allNodes;
+
+      if (
+        !isInitialNode &&
+        isInitialNodeHasConnections(typeOfNode.DatasetNode)
+      ) {
+        const connectedNodeIds = new Set(
+          edges.reduce((acc: any, edge: any) => {
+            acc.push(edge.source, edge.target);
+            return acc;
+          }, [])
+        );
+
+        filteredNodes = allNodes.filter((node: any) =>
+          connectedNodeIds.has(node.id)
+        );
+      }
+
+      const flow = {
+        ...rfInstance.toObject(),
+        nodes: filteredNodes,
+      };
+
       localStorage.setItem(flowKey, JSON.stringify(flow));
     }
-  }, [rfInstance]);
+  }, [rfInstance, edges]);
 
-  // TODO: if flow is empty, just ignore this
   const onRestore = useCallback(() => {
     const restoreFlow = async () => {
       const flowFromStorage = localStorage.getItem(flowKey);
-      if (!flowFromStorage) {
-        return;
-      }
+      if (flowFromStorage) {
+        const flow = JSON.parse(localStorage.getItem(flowKey) ?? "");
 
-      const flow = JSON.parse(localStorage.getItem(flowKey) ?? "");
-
-      if (flow) {
-        const { x = 0, y = 0, zoom = 1 } = flow.viewport;
-        setNodes(flow.nodes || []);
-        setEdges(flow.edges || []);
-        setViewport({ x, y, zoom });
+        if (flow.nodes.length >= 1 && flow.edges.length >= 1) {
+          const { x = 0, y = 0, zoom = 1 } = flow.viewport;
+          setNodes(flow.nodes || []);
+          setEdges(flow.edges || []);
+          setViewport({ x, y, zoom });
+        }
       }
     };
 
