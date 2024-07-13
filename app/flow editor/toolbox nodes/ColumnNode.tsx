@@ -1,14 +1,16 @@
-import React, { memo, useState, useRef, useEffect } from "react";
+import React, { memo, useState, useRef } from "react";
 import { Handle, Position } from "reactflow";
 import ToolboxItem from "../../components/toolbox.item";
 import { typeOfNode } from "../../types/node.type";
 import Modal from "../../components/modal";
-import ReactDiffViewer from "react-diff-viewer-continued";
 import { useSteps } from "../../contexts/steps.context";
-import { matchRegexPattern } from "@/app/utils/utils";
 
 function ColumnNode() {
-  const { fileStats, setColumns: setSelectedColumns } = useSteps();
+  const {
+    fileStats,
+    columns: selectedColumns,
+    setColumns: setSelectedColumns,
+  } = useSteps();
   const modalRef = useRef<HTMLDialogElement>(null);
   const { setIsEditingMode } = useSteps();
   const [selectedColumn, setSelectedColumnState] = useState<string | null>(
@@ -27,8 +29,15 @@ function ColumnNode() {
 
   const handleColumnChange = (event: React.ChangeEvent<HTMLSelectElement>) => {
     const column = event.target.value;
-    setSelectedColumnState(column);
-    setSelectedColumns([column]);
+    if (column && !selectedColumns.includes(column)) {
+      setSelectedColumnState(column);
+      setSelectedColumns([...selectedColumns, column]);
+    }
+  };
+
+  const handleClearSelection = () => {
+    setSelectedColumnState(null);
+    setSelectedColumns([]);
   };
 
   return (
@@ -66,15 +75,29 @@ function ColumnNode() {
             name="columns"
             id="columns"
             style={{ color: "white" }}
-            onChange={handleColumnChange} // Add onChange event handler
-            value={selectedColumn ?? ""} // Set the value to the selected column
+            onChange={handleColumnChange}
+            value={selectedColumn ?? ""}
           >
+            <option value="" disabled={true} style={{ color: "white" }}>
+              {selectedColumn ? "Select another column" : "Select a column"}
+            </option>
             {fileStats?.columns.map((column) => (
-              <option style={{ color: "white" }} key={column} value={column}>
+              <option
+                style={{ color: "white" }}
+                key={column}
+                value={column}
+                disabled={selectedColumns.includes(column)}
+              >
                 {column}
               </option>
             ))}
           </select>
+          <button
+            className="btn btn-secondary mt-2"
+            onClick={handleClearSelection}
+          >
+            Clear Selection
+          </button>
         </div>
       </Modal>
     </>

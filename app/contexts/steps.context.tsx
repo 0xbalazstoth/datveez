@@ -57,7 +57,6 @@ export const StepsProvider = ({ children }: { children: ReactNode }) => {
   const [uploadedFile, setUploadedFile] = useState<File | null>(null);
   const [fileStats, setFileStats] = useState<FileStat | null>(null);
   const [fileData, setFileData] = useState<any[] | null>(null);
-  const [draftConnections, setDraftConnections] = useState<any[]>([]);
   const [isEditingMode, setIsEditingMode] = useState<boolean>(false);
   const [columns, setColumns] = useState<string[]>([]);
 

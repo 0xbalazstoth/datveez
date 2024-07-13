@@ -350,6 +350,7 @@ function LayoutFlow({
             !edge.data.isInitial
         )
       );
+
       saveFlow();
     },
     [setNodes, setEdges, saveFlow]
