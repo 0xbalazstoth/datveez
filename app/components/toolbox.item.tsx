@@ -6,7 +6,7 @@ interface ToolboxItemProps {
   category?: ToolboxCategory;
   isDropped?: boolean;
   tip?: string;
-  id: string;
+  id: string | null;
   onDragStart?: (event: React.DragEvent<HTMLDivElement>, id: string) => void;
   children?: React.ReactNode;
   disabled?: boolean;
@@ -51,7 +51,7 @@ export default function ToolboxItem(props: ToolboxItemProps) {
         draggable={!disabled && onDragStart ? true : false}
         {...(tip ? { "data-tip": tip } : {})}
         onDragStart={(event) =>
-          !disabled && onDragStart && onDragStart(event, id)
+          !disabled && onDragStart && onDragStart(event, id as string)
         }
         onDoubleClick={onDoubleClick}
         onKeyDown={handleKeyDown}

@@ -337,23 +337,25 @@ function LayoutFlow({
     onRestore();
   }, [onRestore]);
 
+  const [selectedColumns, setSelectedColumns] = useState<string[]>([]);
+
   const deleteNode = useCallback(
     (nodeId: string) => {
-      setNodes((nds) =>
-        nds.filter((node) => node.id !== nodeId && !node.data.isInitial)
-      );
+      setNodes((nds) => {
+        const nodeToDelete = nds.find((node) => node.id === nodeId);
+        if (nodeToDelete?.type === "ColumnNode") {
+          setSelectedColumns((cols) =>
+            cols.filter((col) => col !== nodeToDelete.data.label)
+          );
+        }
+        return nds.filter((node) => node.id !== nodeId);
+      });
       setEdges((eds) =>
-        eds.filter(
-          (edge) =>
-            edge.source !== nodeId &&
-            edge.target !== nodeId &&
-            !edge.data.isInitial
-        )
+        eds.filter((edge) => edge.source !== nodeId && edge.target !== nodeId)
       );
-
       saveFlow();
     },
-    [setNodes, setEdges, saveFlow]
+    [setNodes, setEdges, saveFlow, setSelectedColumns]
   );
 
   const clearAllExceptDataset = () => {

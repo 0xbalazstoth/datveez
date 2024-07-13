@@ -1,11 +1,12 @@
-import React, { memo, useState, useRef } from "react";
-import { Handle, Position } from "reactflow";
+import React, { memo, useState, useRef, useEffect } from "react";
+import { Handle, Position, useNodeId } from "reactflow";
 import ToolboxItem from "../../components/toolbox.item";
 import { typeOfNode } from "../../types/node.type";
 import Modal from "../../components/modal";
 import { useSteps } from "../../contexts/steps.context";
 
 function ColumnNode() {
+  const nodeId = useNodeId();
   const {
     fileStats,
     columns: selectedColumns,
@@ -37,13 +38,24 @@ function ColumnNode() {
 
   const handleClearSelection = () => {
     setSelectedColumnState(null);
-    setSelectedColumns([]);
+    setSelectedColumns(selectedColumns.filter((col) => col !== selectedColumn));
   };
+
+  useEffect(() => {
+    return () => {
+      // Cleanup column when node is deleted
+      if (selectedColumn) {
+        setSelectedColumns((cols) =>
+          cols.filter((col) => col !== selectedColumn)
+        );
+      }
+    };
+  }, [selectedColumn, setSelectedColumns]);
 
   return (
     <>
       <ToolboxItem
-        id={Math.random().toString()}
+        id={nodeId}
         name={typeOfNode.ColumnNode.name}
         category={typeOfNode.ColumnNode.category}
         icon={typeOfNode.ColumnNode.icon}
@@ -76,7 +88,7 @@ function ColumnNode() {
             id="columns"
             style={{ color: "white" }}
             onChange={handleColumnChange}
-            value={selectedColumn ?? ""}
+            value={selectedColumn ?? ""} // Set the value to the selected column
           >
             <option value="" disabled={true} style={{ color: "white" }}>
               {selectedColumn ? "Select another column" : "Select a column"}
