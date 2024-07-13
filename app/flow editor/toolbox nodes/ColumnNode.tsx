@@ -8,8 +8,12 @@ import { useSteps } from "../../contexts/steps.context";
 import { matchRegexPattern } from "@/app/utils/utils";
 
 function ColumnNode() {
+  const { fileStats, setColumns: setSelectedColumns } = useSteps();
   const modalRef = useRef<HTMLDialogElement>(null);
   const { setIsEditingMode } = useSteps();
+  const [selectedColumn, setSelectedColumnState] = useState<string | null>(
+    null
+  );
 
   const handleModalOpen = () => {
     modalRef.current?.showModal();
@@ -21,26 +25,10 @@ function ColumnNode() {
     setIsEditingMode(false);
   };
 
-  const defaultText = "Test12.,!?";
-  const defaultPattern = "[a-z]";
-  const normalizedText = matchRegexPattern(defaultText, defaultPattern);
-
-  const [pattern, setPattern] = useState<string>(defaultPattern);
-  const [oldText, setOldText] = useState<string>(defaultText);
-  const [newText, setNewText] = useState<string>(
-    matchRegexPattern(oldText, pattern)
-  );
-
-  const handleInputChange = (event: React.ChangeEvent<HTMLInputElement>) => {
-    const value = event.target.value;
-    setOldText(value);
-    setNewText(matchRegexPattern(value, pattern));
-  };
-
-  const handlePatternChange = (event: React.ChangeEvent<HTMLInputElement>) => {
-    const value = event.target.value;
-    setPattern(value);
-    setNewText(matchRegexPattern(oldText, value));
+  const handleColumnChange = (event: React.ChangeEvent<HTMLSelectElement>) => {
+    const column = event.target.value;
+    setSelectedColumnState(column);
+    setSelectedColumns([column]);
   };
 
   return (
@@ -73,46 +61,20 @@ function ColumnNode() {
         ref={modalRef}
       >
         <div className="flex flex-col gap-2 mt-5">
-          <label className="input input-bordered flex items-center gap-2 text-gray-300">
-            Pattern
-            <input
-              type="text"
-              className="grow"
-              value={pattern}
-              placeholder={defaultPattern}
-              onChange={handlePatternChange}
-              style={{ color: "white" }}
-            />
-          </label>
-
-          <label className="input input-bordered flex items-center gap-2 text-gray-300">
-            Input
-            <input
-              type="text"
-              className="grow"
-              placeholder={defaultText}
-              value={oldText}
-              onChange={handleInputChange}
-              style={{ color: "white" }}
-              maxLength={10}
-            />
-          </label>
-
-          {oldText === "" ? (
-            <ReactDiffViewer
-              oldValue={defaultText}
-              newValue={normalizedText}
-              splitView={true}
-              useDarkTheme={true}
-            />
-          ) : (
-            <ReactDiffViewer
-              oldValue={oldText}
-              newValue={newText}
-              splitView={true}
-              useDarkTheme={true}
-            />
-          )}
+          <select
+            className="select select-bordered w-full max-w-md"
+            name="columns"
+            id="columns"
+            style={{ color: "white" }}
+            onChange={handleColumnChange} // Add onChange event handler
+            value={selectedColumn ?? ""} // Set the value to the selected column
+          >
+            {fileStats?.columns.map((column) => (
+              <option style={{ color: "white" }} key={column} value={column}>
+                {column}
+              </option>
+            ))}
+          </select>
         </div>
       </Modal>
     </>

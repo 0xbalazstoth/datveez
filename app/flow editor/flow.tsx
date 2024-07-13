@@ -27,7 +27,6 @@ import ReactFlow, {
   applyNodeChanges,
 } from "reactflow";
 import { MarkerType } from "reactflow";
-import InitialNode from "./node";
 import CustomEdge from "./edge";
 import { IoSaveOutline } from "react-icons/io5";
 
@@ -59,7 +58,6 @@ const getLayoutedElements = (nodes: any, edges: any, options: any) => {
   if (nodes.length === 0) return { nodes, edges };
 
   if (typeof window === "undefined") {
-    // Return nodes and edges as they are for server-side rendering
     return { nodes, edges };
   }
 
@@ -177,15 +175,12 @@ function LayoutFlow({
       if (
         isNodeHasConnectionWith(typeOfNode.ColumnNode.nodeHandlerId) === false
       ) {
-        // Remove those nodes which are not even connected to anything
         filteredNodes = allNodes.filter((node: any) =>
           edges.some(
             (edge: Edge<any>) =>
               edge.source === node.id || edge.target === node.id
           )
         );
-
-        console.log("Filtered Nodes:", filteredNodes);
       }
 
       const flow = {
@@ -408,7 +403,7 @@ function LayoutFlow({
         y: event.clientY,
       });
       const newNode = {
-        id: uuidv4(), // Use UUID for unique ID
+        id: uuidv4(),
         type,
         position,
         data: {
