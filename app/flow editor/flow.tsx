@@ -199,62 +199,18 @@ function LayoutFlow({
     restoreFlow();
   }, [setEdges, setNodes, setViewport]);
 
-  const onConnect = useCallback(
-    (params: Edge | Connection) => {
-      const { source, target } = params;
+  const onConnect = useCallback((params: Edge | Connection) => {
+    const { source, target } = params;
 
-      // Check if the source node is the initial node
-      const sourceNode = nodes.find((node) => node.id === source);
-      const isSourceInitial = sourceNode?.data?.isInitial;
+    // Check if the source node is the initial node
+    const sourceNode = nodes.find((node) => node.id === source);
+    const isSourceInitial = sourceNode?.data?.isInitial;
 
-      // Check if the target node is a ColumnNode
-      const targetNode = nodes.find((node) => node.id === target);
-      const isTargetColumnNode = targetNode?.type === "ColumnNode";
+    if (!isSourceInitial && connectionType === "one-to-one") {
+      const sourceConnected = edges.some((edge) => edge.source === source);
+      const targetConnected = edges.some((edge) => edge.target === target);
 
-      // Check if the source node is a ColumnNode
-      const isSourceColumnNode = sourceNode?.type === "ColumnNode";
-
-      // Initial node can only connect to ColumnNode
-      if (isSourceInitial) {
-        if (isTargetColumnNode) {
-          setEdges((eds) =>
-            addEdge(
-              {
-                ...params,
-                type: "custom",
-                markerEnd: { type: MarkerType.ArrowClosed },
-              },
-              eds
-            )
-          );
-          saveFlow();
-        }
-      }
-      // ColumnNode cannot connect to another ColumnNode
-      else if (isSourceColumnNode && isTargetColumnNode) {
-        return; // Do not allow the connection
-      }
-      // One-to-one connection type logic
-      else if (connectionType === "one-to-one") {
-        const sourceConnected = edges.some((edge) => edge.source === source);
-        const targetConnected = edges.some((edge) => edge.target === target);
-
-        if (!sourceConnected && !targetConnected) {
-          setEdges((eds) =>
-            addEdge(
-              {
-                ...params,
-                type: "custom",
-                markerEnd: { type: MarkerType.ArrowClosed },
-              },
-              eds
-            )
-          );
-          saveFlow();
-        }
-      }
-      // Default connection logic
-      else {
+      if (!sourceConnected && !targetConnected) {
         setEdges((eds) =>
           addEdge(
             {
@@ -267,9 +223,20 @@ function LayoutFlow({
         );
         saveFlow();
       }
-    },
-    [connectionType, edges, setEdges, saveFlow, nodes]
-  );
+    } else {
+      setEdges((eds) =>
+        addEdge(
+          {
+            ...params,
+            type: "custom",
+            markerEnd: { type: MarkerType.ArrowClosed },
+          },
+          eds
+        )
+      );
+      saveFlow();
+    }
+  }, []);
 
   const onEdgesDelete = useCallback(
     (edgesToRemove: Edge<any>[]) => {
