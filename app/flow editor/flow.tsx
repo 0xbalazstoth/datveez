@@ -231,6 +231,11 @@ function LayoutFlow({
       // ColumnNode cannot connect to another ColumnNode
       else if (isSourceColumnNode && isTargetColumnNode) {
         return; // Do not allow the connection
+      } else if (
+        sourceNode?.type !== "ColumnNode" &&
+        targetNode?.type === "ColumnNode"
+      ) {
+        return;
       }
       // One-to-one connection type logic
       else if (connectionType === "one-to-one") {
