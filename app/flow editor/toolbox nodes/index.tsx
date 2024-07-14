@@ -8,6 +8,7 @@ import SpecialCharactersNode from "./SpecialCharactersNode";
 import URLSNode from "./URLSNode";
 import StopwordsNode from "./StopwordsNode";
 import ColumnNode from "./ColumnNode";
+import EmojiNode from "./EmojiNode";
 
 export {
   tokenizationNode,
@@ -20,4 +21,5 @@ export {
   StopwordsNode,
   ColumnNode,
   InitialNode,
+  EmojiNode,
 };

@@ -140,6 +140,7 @@ function LayoutFlow({
   const layoutInitialized = useRef(false);
 
   const [rfInstance, setRfInstance] = useState<ReactFlowInstance | null>(null);
+  const { isEditingMode, setFlow } = useSteps();
 
   const flowKey = "flow";
 
@@ -155,7 +156,6 @@ function LayoutFlow({
       let filteredNodes = allNodes;
 
       if (!isInitialNode && isNodeHasConnectionWith(typeOfNode.DatasetNode)) {
-        console.log("Filtering nodes");
         const connectedNodeIds = new Set(
           edges.reduce((acc: any, edge: Edge<any>) => {
             acc.push(edge.source, edge.target);
@@ -167,11 +167,6 @@ function LayoutFlow({
           connectedNodeIds.has(node.id)
         );
       }
-
-      console.log(
-        typeOfNode.ColumnNode.nodeHandlerId,
-        isNodeHasConnectionWith(typeOfNode.ColumnNode.nodeHandlerId)
-      );
       if (
         isNodeHasConnectionWith(typeOfNode.ColumnNode.nodeHandlerId) === false
       ) {
@@ -183,11 +178,13 @@ function LayoutFlow({
         );
       }
 
+      // TODO: Save the flow in the context
       const flow = {
         ...rfInstance.toObject(),
         nodes: filteredNodes,
       };
 
+      // setFlow(flow);
       localStorage.setItem(flowKey, JSON.stringify(flow));
     }
   }, [rfInstance, edges]);
@@ -441,8 +438,6 @@ function LayoutFlow({
       }),
     [setNodes]
   );
-
-  const { isEditingMode } = useSteps();
 
   return (
     <>

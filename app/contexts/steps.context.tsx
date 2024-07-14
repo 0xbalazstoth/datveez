@@ -26,6 +26,8 @@ interface StepsContextProps {
   setIsEditingMode: React.Dispatch<React.SetStateAction<boolean>>;
   columns: string[];
   setColumns: React.Dispatch<React.SetStateAction<string[]>>;
+  flow: any;
+  setFlow: React.Dispatch<React.SetStateAction<any>>;
 }
 
 const StepsContext = createContext<StepsContextProps | undefined>(undefined);
@@ -59,6 +61,7 @@ export const StepsProvider = ({ children }: { children: ReactNode }) => {
   const [fileData, setFileData] = useState<any[] | null>(null);
   const [isEditingMode, setIsEditingMode] = useState<boolean>(false);
   const [columns, setColumns] = useState<string[]>([]);
+  const [flow, setFlow] = useState<any>(null);
 
   useEffect(() => {
     const savedSteps = localStorage.getItem("steps");
@@ -117,6 +120,8 @@ export const StepsProvider = ({ children }: { children: ReactNode }) => {
         setIsEditingMode,
         columns,
         setColumns,
+        flow,
+        setFlow,
       }}
     >
       {children}

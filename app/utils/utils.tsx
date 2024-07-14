@@ -1,4 +1,5 @@
 import * as sw from "stopword";
+import emojiStrip from "emoji-strip";
 
 export const lowercasing = (text: string) => {
   return text.toLowerCase();
@@ -33,4 +34,8 @@ export const removeStopWords = (text: string) => {
   const filteredWords = sw.removeStopwords(words);
 
   return filteredWords.join(" ");
+};
+
+export const removeEmoji = (text: string) => {
+  return emojiStrip(text);
 };

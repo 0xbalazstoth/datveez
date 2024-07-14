@@ -94,6 +94,17 @@ export const createRemovalToolboxItems = (
     borderColor: typeOfNode.StopwordsNode.borderColor,
     isRecommended: typeOfNode.StopwordsNode.isRecommended,
   },
+  {
+    id: typeOfNode.EmojiNode.name,
+    name: typeOfNode.EmojiNode.name,
+    category: typeOfNode.EmojiNode.category,
+    tip: typeOfNode.EmojiNode.tip,
+    onDragStart: (event: React.DragEvent<HTMLDivElement>) =>
+      onDragStart(event, typeOfNode.EmojiNode.nodeComponentName),
+    icon: typeOfNode.EmojiNode.icon,
+    borderColor: typeOfNode.EmojiNode.borderColor,
+    isRecommended: typeOfNode.EmojiNode.isRecommended,
+  },
 ];
 
 export const createCustomToolboxItems = (

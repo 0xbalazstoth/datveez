@@ -28,10 +28,12 @@ interface StepsPageProps {}
 const StepsPageContent = (props: StepsPageProps) => {
   const {} = props;
 
-  const { steps, currentStepIndex, uploadedFile } = useSteps();
+  const { steps, currentStepIndex, uploadedFile, columns, fileStats, flow } =
+    useSteps();
 
   const [isScreenSmall, setIsScreenSmall] = useState(false);
   const [isClient, setIsClient] = useState(false);
+  const [disableColumnToolbox, setDisableColumnToolbox] = useState(false);
 
   const onDragStart = (
     event: React.DragEvent<HTMLDivElement>,
@@ -59,6 +61,27 @@ const StepsPageContent = (props: StepsPageProps) => {
       window.removeEventListener("resize", handleResize);
     };
   }, []);
+
+  // useEffect(() => {
+  //   // TODO: Also when the same amount if columns are dropped on the canvas, disable the column toolbox too
+  //   if (flow) {
+  //     const columnNodes = flow.nodes.filter(
+  //       (node: any) => node.type === "ColumnNode"
+  //     );
+
+  //     if (columnNodes.length === fileStats?.columns.length) {
+  //       setDisableColumnToolbox(true);
+  //     } else {
+  //       setDisableColumnToolbox(false);
+  //     }
+  //   }
+
+  //   if (columns.length === fileStats?.columns.length) {
+  //     setDisableColumnToolbox(true);
+  //   } else {
+  //     setDisableColumnToolbox(false);
+  //   }
+  // }, [columns, fileStats, flow]);
 
   if (!isClient) {
     return null;
@@ -139,6 +162,7 @@ const StepsPageContent = (props: StepsPageProps) => {
                     borderColor={item.borderColor}
                     onClick={item.onDoubleClick}
                     isRecommended={item.isRecommended}
+                    disabled={disableColumnToolbox}
                   />
                 )
               )}

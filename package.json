@@ -16,6 +16,7 @@
     "@heroicons/react": "^2.1.4",
     "d3": "^7.9.0",
     "d3-hierarchy": "^3.1.2",
+    "emoji-strip": "^1.0.1",
     "next": "14.2.4",
     "node-nlp": "^4.27.0",
     "node-nlp-typescript": "^1.0.3",
@@ -36,6 +37,7 @@
   },
   "devDependencies": {
     "@types/d3": "^7.4.3",
+    "@types/emoji-strip": "^1.0.2",
     "@types/node": "^20",
     "@types/papaparse": "^5.3.14",
     "@types/react": "^18",

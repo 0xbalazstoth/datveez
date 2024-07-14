@@ -4,6 +4,7 @@ import ToolboxItem from "../../components/toolbox.item";
 import { typeOfNode } from "../../types/node.type";
 import Modal from "../../components/modal";
 import { useSteps } from "../../contexts/steps.context";
+import { XMarkIcon } from "@heroicons/react/24/outline";
 
 function ColumnNode() {
   const nodeId = useNodeId();
@@ -82,34 +83,34 @@ function ColumnNode() {
         ref={modalRef}
       >
         <div className="flex flex-col gap-2 mt-5">
-          <select
-            className="select select-bordered w-full max-w-md"
-            name="columns"
-            id="columns"
-            style={{ color: "white" }}
-            onChange={handleColumnChange}
-            value={selectedColumn ?? ""} // Set the value to the selected column
-          >
-            <option value="" disabled={true} style={{ color: "white" }}>
-              {selectedColumn ? "Select another column" : "Select a column"}
-            </option>
-            {fileStats?.columns.map((column) => (
-              <option
-                style={{ color: "white" }}
-                key={column}
-                value={column}
-                disabled={selectedColumns.includes(column)}
-              >
-                {column}
+          <div className="flex flex-row gap-2">
+            <select
+              className="select select-bordered w-full max-w-md"
+              name="columns"
+              id="columns"
+              style={{ color: "white" }}
+              onChange={handleColumnChange}
+              value={selectedColumn ?? ""}
+            >
+              <option value="" disabled={true} style={{ color: "white" }}>
+                {selectedColumn ? "Select another column" : "Select a column"}
               </option>
-            ))}
-          </select>
-          <button
-            className="btn btn-secondary mt-2"
-            onClick={handleClearSelection}
-          >
-            Clear Selection
-          </button>
+              {fileStats?.columns.map((column) => (
+                <option
+                  style={{ color: "white" }}
+                  key={column}
+                  value={column}
+                  disabled={selectedColumns.includes(column)}
+                >
+                  {column}
+                </option>
+              ))}
+            </select>
+            <button className="btn btn-error" onClick={handleClearSelection}>
+              <XMarkIcon className="h-5 w-5" />
+              Clear
+            </button>
+          </div>
         </div>
       </Modal>
     </>

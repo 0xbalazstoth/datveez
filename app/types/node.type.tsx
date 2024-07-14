@@ -12,6 +12,7 @@ import {
   numbersNode,
   CustomRegexNode,
   StopwordsNode,
+  EmojiNode,
 } from "../flow editor/toolbox nodes/index";
 import SpecialCharactersNode from "../flow editor/toolbox nodes/SpecialCharactersNode";
 import URLSNode from "../flow editor/toolbox nodes/URLSNode";
@@ -109,6 +110,15 @@ const typeOfNode = {
     icon: <TbColumns className="h-5 w-5" />,
     borderColor: nodeCategoryColors.Column,
   },
+  EmojiNode: {
+    name: "Emoji",
+    nodeHandlerId: "EmojiNode",
+    nodeComponentName: "EmojiNode",
+    category: ToolboxCategory.Remove,
+    tip: "Remove emojis",
+    icon: React.createElement("span", null, "🤯"),
+    borderColor: nodeCategoryColors.Remove,
+  },
 };
 
 const nodeComponentTypes = {
@@ -121,6 +131,7 @@ const nodeComponentTypes = {
   URLSNode: URLSNode,
   ColumnNode: ColumnNode,
   SpecialCharactersNode: SpecialCharactersNode,
+  EmojiNode: EmojiNode,
 };
 
 export { typeOfNode, nodeCategoryColors, nodeComponentTypes };
